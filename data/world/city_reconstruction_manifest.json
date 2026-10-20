@@ -1,0 +1,262 @@
+{
+  "schema_version": 1,
+  "directive": "REAL_WORLD_CITY_RECONSTRUCTION_1_TO_1",
+  "mode": "PRODUCTION_REQUIREMENT_NOT_IMPLEMENTED",
+  "geometry_contract": {
+    "game_units_per_meter": 1,
+    "no_artificial_distance_compression": true,
+    "canonical_globe_crs": "EPSG:4326",
+    "polish_source_crs": "EPSG:2180",
+    "czech_source_crs": "EPSG:5514",
+    "runtime_frame": "local_east_up_north_in_meters",
+    "canonical_tile_size_m": 256,
+    "tile_origin_strategy": "per-city georeferenced origin; no arbitrary coordinates in source data",
+    "historical_scene_snapshots": [
+      "2023",
+      "2024",
+      "2025"
+    ],
+    "coordinate_transform_status": "NOT_IMPLEMENTED",
+    "streaming_status": "NOT_IMPLEMENTED"
+  },
+  "proposed_acceptance_tolerances": {
+    "note": "Targets to approve after evaluating source data accuracy; NOT achieved measurements.",
+    "critical_location_horizontal_error_m_max": 0.5,
+    "street_centerline_error_m_max": 1.5,
+    "noncritical_terrain_vertical_error_m_max": 1,
+    "building_footprint_error_m_max": 1,
+    "landmark_facade_visual_signoff_required": true
+  },
+  "source_registry": [
+    {
+      "id": "GUGIK_3D_BUILDINGS",
+      "country": "PL",
+      "type": "building_geometry",
+      "url": "https://www.geoportal.gov.pl/pl/dane/inne-dane/modele-3d-budynkow/",
+      "license_review": "PENDING_PER_ASSET"
+    },
+    {
+      "id": "GUGIK_BDOT10K",
+      "country": "PL",
+      "type": "base_topography_and_roads",
+      "url": "https://www.geoportal.gov.pl/pl/dane/baza-danych-obiektow-topograficznych-bdot10k/",
+      "license_review": "PENDING_PER_ASSET"
+    },
+    {
+      "id": "CUZK_DMR5G",
+      "country": "CZ",
+      "type": "terrain_and_height",
+      "url": "https://geoportal.cuzk.cz/",
+      "license_review": "PENDING_PER_ASSET"
+    },
+    {
+      "id": "OSM",
+      "country": "MULTI",
+      "type": "supplementary_topology",
+      "url": "https://www.openstreetmap.org/copyright",
+      "license_review": "REVIEW_ODBL_DERIVED_DATABASE"
+    }
+  ],
+  "locations": [
+    {
+      "id": "PL-CIESZYN",
+      "name": "Cieszyn",
+      "country": "PL",
+      "type": "city",
+      "priority": "CORE_HUB",
+      "source_crs": "PL-1992 / EPSG:2180",
+      "temporal_versions": [
+        "2023",
+        "2024",
+        "2025"
+      ],
+      "source_coverage_status": "NEEDS_CHAPTER_PAGE_MAPPING",
+      "scenes_from_book": [],
+      "verified_geographic_anchor": null,
+      "verified_bounds": null,
+      "footage_or_photo_references": [],
+      "geodata_imported": false,
+      "surveyed_landmark_count": 0,
+      "photogrammetry_mesh_count": 0,
+      "city_build_status": "NOT_STARTED",
+      "historical_reconstruction_verified": false,
+      "source_assets": [],
+      "acceptance_report": null
+    },
+    {
+      "id": "CZ-CESKY-TESIN",
+      "name": "Český Těšín",
+      "country": "CZ",
+      "type": "city",
+      "priority": "CORE_HUB",
+      "source_crs": "S-JTSK / EPSG:5514",
+      "temporal_versions": [
+        "2023",
+        "2024",
+        "2025"
+      ],
+      "source_coverage_status": "NEEDS_CHAPTER_PAGE_MAPPING",
+      "scenes_from_book": [],
+      "verified_geographic_anchor": null,
+      "verified_bounds": null,
+      "footage_or_photo_references": [],
+      "geodata_imported": false,
+      "surveyed_landmark_count": 0,
+      "photogrammetry_mesh_count": 0,
+      "city_build_status": "NOT_STARTED",
+      "historical_reconstruction_verified": false,
+      "source_assets": [],
+      "acceptance_report": null
+    },
+    {
+      "id": "PL-BIELSKO-BIALA",
+      "name": "Bielsko-Biała",
+      "country": "PL",
+      "type": "city",
+      "priority": "CHAPTER_LOCATION",
+      "source_crs": "PL-1992 / EPSG:2180",
+      "temporal_versions": [
+        "2023",
+        "2024",
+        "2025"
+      ],
+      "source_coverage_status": "NEEDS_CHAPTER_PAGE_MAPPING",
+      "scenes_from_book": [],
+      "verified_geographic_anchor": null,
+      "verified_bounds": null,
+      "footage_or_photo_references": [],
+      "geodata_imported": false,
+      "surveyed_landmark_count": 0,
+      "photogrammetry_mesh_count": 0,
+      "city_build_status": "NOT_STARTED",
+      "historical_reconstruction_verified": false,
+      "source_assets": [],
+      "acceptance_report": null
+    },
+    {
+      "id": "PL-ZORY",
+      "name": "Żory",
+      "country": "PL",
+      "type": "city",
+      "priority": "CHAPTER_LOCATION",
+      "source_crs": "PL-1992 / EPSG:2180",
+      "temporal_versions": [
+        "2023",
+        "2024",
+        "2025"
+      ],
+      "source_coverage_status": "NEEDS_CHAPTER_PAGE_MAPPING",
+      "scenes_from_book": [],
+      "verified_geographic_anchor": null,
+      "verified_bounds": null,
+      "footage_or_photo_references": [],
+      "geodata_imported": false,
+      "surveyed_landmark_count": 0,
+      "photogrammetry_mesh_count": 0,
+      "city_build_status": "NOT_STARTED",
+      "historical_reconstruction_verified": false,
+      "source_assets": [],
+      "acceptance_report": null
+    },
+    {
+      "id": "PL-WARSZAWA",
+      "name": "Warszawa",
+      "country": "PL",
+      "type": "city",
+      "priority": "CHAPTER_LOCATION",
+      "source_crs": "PL-1992 / EPSG:2180",
+      "temporal_versions": [
+        "2023",
+        "2024",
+        "2025"
+      ],
+      "source_coverage_status": "NEEDS_CHAPTER_PAGE_MAPPING",
+      "scenes_from_book": [],
+      "verified_geographic_anchor": null,
+      "verified_bounds": null,
+      "footage_or_photo_references": [],
+      "geodata_imported": false,
+      "surveyed_landmark_count": 0,
+      "photogrammetry_mesh_count": 0,
+      "city_build_status": "NOT_STARTED",
+      "historical_reconstruction_verified": false,
+      "source_assets": [],
+      "acceptance_report": null
+    },
+    {
+      "id": "PL-LUBLIN",
+      "name": "Lublin",
+      "country": "PL",
+      "type": "city",
+      "priority": "CHAPTER_LOCATION",
+      "source_crs": "PL-1992 / EPSG:2180",
+      "temporal_versions": [
+        "2023",
+        "2024",
+        "2025"
+      ],
+      "source_coverage_status": "NEEDS_CHAPTER_PAGE_MAPPING",
+      "scenes_from_book": [],
+      "verified_geographic_anchor": null,
+      "verified_bounds": null,
+      "footage_or_photo_references": [],
+      "geodata_imported": false,
+      "surveyed_landmark_count": 0,
+      "photogrammetry_mesh_count": 0,
+      "city_build_status": "NOT_STARTED",
+      "historical_reconstruction_verified": false,
+      "source_assets": [],
+      "acceptance_report": null
+    },
+    {
+      "id": "PL-LECZNA",
+      "name": "Łęczna",
+      "country": "PL",
+      "type": "city",
+      "priority": "CHAPTER_LOCATION",
+      "source_crs": "PL-1992 / EPSG:2180",
+      "temporal_versions": [
+        "2023",
+        "2024",
+        "2025"
+      ],
+      "source_coverage_status": "NEEDS_CHAPTER_PAGE_MAPPING",
+      "scenes_from_book": [],
+      "verified_geographic_anchor": null,
+      "verified_bounds": null,
+      "footage_or_photo_references": [],
+      "geodata_imported": false,
+      "surveyed_landmark_count": 0,
+      "photogrammetry_mesh_count": 0,
+      "city_build_status": "NOT_STARTED",
+      "historical_reconstruction_verified": false,
+      "source_assets": [],
+      "acceptance_report": null
+    },
+    {
+      "id": "CZ-STONAVA-CSM",
+      "name": "Stonava / rejon kopalni ČSM",
+      "country": "CZ",
+      "type": "site",
+      "priority": "SOURCE_REVIEW_REQUIRED",
+      "source_crs": "S-JTSK / EPSG:5514",
+      "temporal_versions": [
+        "2023",
+        "2024",
+        "2025"
+      ],
+      "source_coverage_status": "NEEDS_CHAPTER_PAGE_MAPPING",
+      "scenes_from_book": [],
+      "verified_geographic_anchor": null,
+      "verified_bounds": null,
+      "footage_or_photo_references": [],
+      "geodata_imported": false,
+      "surveyed_landmark_count": 0,
+      "photogrammetry_mesh_count": 0,
+      "city_build_status": "NOT_STARTED",
+      "historical_reconstruction_verified": false,
+      "source_assets": [],
+      "acceptance_report": null
+    }
+  ]
+}

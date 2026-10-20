@@ -6,6 +6,10 @@ Repozytorium produkcyjne adaptacji książki Andrzeja Mikulskiego. Przewidywany 
 
 > **STATUS: GRYWALNY GREYBOX CH01 / ANDROID DEBUG BUILD.** Projekt Godot 4.5.2 uruchamia się w headless CI, a pakiet APK ARM64 powstał i został zweryfikowany jako poprawne archiwum. **Nie przeprowadzono testu na fizycznym Androidzie.** Nie istnieją jeszcze fotorealistyczne modele, animacje aktorskie ani pozostałe 69 rozdziałów w postaci gry.
 
+## Bezwzględny wymóg: WORLD 1:1
+
+Miasta i miejsca fabuły muszą być **geograficznie odwzorowane w rzeczywistej skali metrycznej 1:1**, z zgodnością architektury oraz dat 2023–2025. Obecna scena gali to **techniczna makieta**, nie rekonstrukcja żadnego miasta. **[Specyfikacja WORLD 1:1](docs/WORLD_1_TO_1_SPECIFICATION.md)**, [manifest lokalizacji](data/world/city_reconstruction_manifest.json) i [testy przestrzenne](reference/test_world_grid.py) definiują obowiązkowy etap produkcji i bramkę odbioru. Bez rzeczywistych danych przestrzennych, pozwoleń, foto-referencji i testów nie wolno oznaczyć świata jako ukończonego.
+
 ## Zakres źródłowy
 
 | Akt | Nazwa | Rozdziały |

@@ -9,6 +9,11 @@
 | G0.5 | Character Art Bible | DRAFT | komplet QA i zatwierdzone visual refs |
 | G1 | Godot 4.5.2: projekt Android, ruch TPP, kamera, zapisy | CI VERIFIED, DEVICE UNTESTED | źródła Godot + runtime smoke + profilowanie na telefonie |
 | G2 | Prolog/kurtyna/CH01 jako mobile greybox | IMPLEMENTED; APK EXPORTED | interakcje i start potwierdzić na urządzeniu; prolog audio nieobecny |
+| WORLD.01 | WORLD 1:1 — specyfikacja i manifest geograficzny | SPECIFICATION WRITTEN | kontrakt, 8 rejestrów lokacji, walidacja |
+| WORLD.02 | Dopasowanie scen książki do miast i lokalizacji | NOT STARTED | każda użyta lokacja ma rozdział/stronę/datę |
+| WORLD.03 | Import danych terenowych i 3D: PL + CZ | NOT STARTED | ETL, raporty praw i układów CRS |
+| WORLD.04 | Miasta 1:1: Cieszyn/Český Těšín i lokacje pozostałych miast | NOT STARTED | kontrola siatki ulic, budynków, foto-match |
+| WORLD.05 | Historyczne warianty i streaming sektorów Android | NOT STARTED | profil urządzenia + zatwierdzona rekonstrukcja |
 | G3 | Modele 3D, facial rig, animacje, tatuaże | NOT STARTED | zatwierdzone modele z wydajnością LOD |
 | G4 | 70 pełnych grywalnych rozdziałów | NOT STARTED | scenariusze, sceny, decyzje, aktorstwo, testy |
 | G5 | Galeria, 3 DLC, PL/EN, audio source-lock | NOT STARTED | pozytywne testy i zatwierdzenia mediów |
@@ -18,4 +23,4 @@
 `DONE` tylko dla faktycznie zapisanych i sprawdzonych artefaktów. `DRAFT` nie oznacza akceptacji. `NOT STARTED` nie jest równoznaczne z niemożliwością. Godot CI uruchomił scenę i wyeksportował debug APK. Nie jest to benchmark telefonu, test dotyku, ani dowód osiągnięcia jakości AAA.
 
 ## Następny etap
-Priorytet: rzeczywisty test istniejącego APK na telefonie (instalacja, klatki, interfejs, zapis, zdjęcia i powrót do gry). Potem wymiana scenografii testowej na modele produkcyjne. Równolegle odseparować chronione zasoby, skorygować scenariusz na podstawie wersji książki zatwierdzonej do ekranizacji i ukończyć pipeline modeli.
+Priorytet: etap WORLD.02: kartowanie każdej sceny książki na konkretny obszar miasta oraz WORLD.03: pozyskanie i weryfikacja danych GIS/LiDAR. Równolegle: rzeczywisty test istniejącego APK na telefonie (instalacja, klatki, interfejs, zapis, zdjęcia i powrót do gry). Potem wymiana scenografii testowej na modele produkcyjne. Równolegle odseparować chronione zasoby, skorygować scenariusz na podstawie wersji książki zatwierdzonej do ekranizacji i ukończyć pipeline modeli.
