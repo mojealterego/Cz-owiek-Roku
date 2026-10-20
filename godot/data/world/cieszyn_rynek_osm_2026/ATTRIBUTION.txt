@@ -1,0 +1,8 @@
+© OpenStreetMap contributors.
+Source https://www.openstreetmap.org/ ; raw API extract linked in manifest.
+Source/database license Open Database License (ODbL) 1.0:
+https://opendatacommons.org/licenses/odbl/1-0/
+Geospatial subset in this folder and the matching GeoJSON extract
+are offered as a derived database under the ODbL 1.0.
+These data are NOT historically validated for 2023–2025 and
+are NOT field-surveyed building heights, terrain, or facades.

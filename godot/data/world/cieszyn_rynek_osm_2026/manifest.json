@@ -1,0 +1,27 @@
+{
+  "anchor_wgs84": {
+    "lat": 49.74816,
+    "lon": 18.6332106
+  },
+  "build_status": "CURRENT_BASEMAP_NOT_HISTORICALLY_VERIFIED",
+  "buildings_height_status": "UNKNOWN",
+  "city_id": "CIESZYN_RYNEK",
+  "facades_historical_status": "NOT_VERIFIED",
+  "historical_year": "2026",
+  "proj_version": "3.7.2",
+  "projection": "LOCAL_WGS84_AEQD",
+  "redistribution_allowed": true,
+  "schema_version": 1,
+  "source": {
+    "id": "OPENSTREETMAP_2026_CIESZYN_RYNEK",
+    "license": "ODbL-1.0",
+    "sha256": "016624e346a2e1a24eeb09cd5d6a7662028713852e3460812236b74cb0183ca1",
+    "url": "https://api.openstreetmap.org/api/0.6/map?bbox=18.6310%2C49.7468%2C18.6340%2C49.7492"
+  },
+  "source_crs": "EPSG:4326",
+  "source_features": 183,
+  "terrain_status": "MISSING",
+  "tile_count": 4,
+  "tile_size_m": 256,
+  "type": "WORLD_METRIC_TILES"
+}
