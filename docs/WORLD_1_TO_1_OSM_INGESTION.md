@@ -1,11 +1,22 @@
 # WORLD.03b — rzeczywiste obrysy Cieszyna, automatyczny import OSM
 
-Status: importer i jednorazowy workflow CI. **Dane geometrii liczą się dopiero po zakończonym pobraniu, walidacji i commicie; nie należy utożsamiać samego istnienia skryptu z importem.**
+Status: **pierwsze dwa rzeczywiste wycinki zaimportowane i sprawdzone CI**. Całe miasta 1:1 nadal NIE zostały odwzorowane. Drugi wycinek obejmuje Český Těšín.
 
 Źródło: https://api.openstreetmap.org/api/0.6/map?bbox=18.631%2C49.7468%2C18.634%2C49.7492
 
+## Zweryfikowane wyniki importów (2026-10-20)
+
+| Wycinek | OSM budynki 2D | OSM drogi | Sektory | Dowód |
+|---|---:|---:|---:|---|
+| Cieszyn centrum | 117 | 66 | 4 | https://github.com/mojealterego/Cz-owiek-Roku/actions/runs/39466656392 |
+| Český Těšín centrum | 280 | 79 | 9 | https://github.com/mojealterego/Cz-owiek-Roku/actions/runs/39467589299 |
+
+Źródło czeskie: https://api.openstreetmap.org/api/0.6/map?bbox=18.6235%2C49.7440%2C18.6280%2C49.7483
+
+Obie partie danych zostały przeliczone do tego samego lokalnego układu AEQD zakotwiczonego w ratuszu Cieszyna, bez kompresji skali. Godot wczytuje dwie warstwy rzeczywistych obrysów, a testy kontrolują 397 unikalnych obiektów budynkowych i 145 drogowych. [CI Godot](https://github.com/mojealterego/Cz-owiek-Roku/actions/runs/39468814086).
+
 ## Zakres i bezpieczeństwo
-- Wycinany obszar: Cieszyn, centrum w okolicach Rynku. Nie jest to pełny Cieszyn ani obszar całego Czeskiego Cieszyna.
+- Wycinane obszary: Cieszyn, centrum w okolicach Rynku, **oraz** centrum Českého Těšína. Żaden wycinek nie stanowi pełnej mapy miasta.
 - Kategoria: **building** — tylko poprawne, domknięte poligony OSM typu way; wysokości nie są znane, nie wolno ich zgadywać.
 - Kategoria: **road** — linie ways oznaczone `highway`, bez dopisywania szerokości, chodników, tekstur lub ruchu pojazdów.
 - Niezaimplementowane: relacje multipolygon, poziomy budynków, wysokości, LiDAR, elewacje, granice działek, historyczne zmiany z lat 2023–2025.

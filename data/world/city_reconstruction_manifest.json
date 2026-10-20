@@ -18,9 +18,9 @@
     ],
     "coordinate_transform_status": "IMPLEMENTED_IN_GEOETL_CI_TESTED_FULL_CITY_IMPORT_PENDING",
     "streaming_status": "NOT_IMPLEMENTED",
-    "preview_status": "TWO_PUBLIC_LANDMARK_REFERENCE_POINTS_ONLY",
-    "preview_godot_status": "SCENE_HEADLESS_VERIFIED_PHYSICAL_ANDROID_UNTESTED",
-    "source_building_road_terrain_status": "NOT_IMPORTED"
+    "preview_status": "TWO_PUBLIC_LANDMARKS_AND_13_REAL_OSM_TILES_CURRENT_2026",
+    "preview_godot_status": "REAL_2D_FOOTPRINTS_ROADS_HEADLESS_CI_VERIFIED_ANDROID_PHYSICAL_UNTESTED",
+    "source_building_road_terrain_status": "PARTIAL_CURRENT_OSM_BUILDING_FOOTPRINTS_AND_ROADS_IMPORTED_TERRAIN_MISSING"
   },
   "proposed_acceptance_tolerances": {
     "note": "Targets to approve after evaluating source data accuracy; NOT achieved measurements.",
@@ -261,5 +261,40 @@
       "source_assets": [],
       "acceptance_report": null
     }
-  ]
+  ],
+  "current_basemap_2026": {
+    "complete_city_model": false,
+    "historical_2023_2025_verified": false,
+    "terrain_imported": false,
+    "building_heights_verified": false,
+    "rights": "© OpenStreetMap contributors / ODbL 1.0",
+    "anchor_wgs84": {
+      "lon": 18.6332106,
+      "lat": 49.74816
+    },
+    "subsets": [
+      {
+        "city_id": "PL-CIESZYN",
+        "source_folder": "godot/data/world/cieszyn_rynek_osm_2026",
+        "buildings_2d": 117,
+        "road_ways": 66,
+        "tiles": 4
+      },
+      {
+        "city_id": "CZ-CESKY-TESIN",
+        "source_folder": "godot/data/world/cesky_tesin_center_osm_2026",
+        "buildings_2d": 280,
+        "road_ways": 79,
+        "tiles": 9
+      }
+    ],
+    "verification": {
+      "geodata_runs": [
+        39466656392,
+        39467589299
+      ],
+      "godot_runtime_run": 39468814086,
+      "android_export_run": 39468813871
+    }
+  }
 }

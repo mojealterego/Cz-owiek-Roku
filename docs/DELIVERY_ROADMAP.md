@@ -11,17 +11,18 @@
 | G2 | Prolog/kurtyna/CH01 jako mobile greybox | IMPLEMENTED; APK EXPORTED | interakcje i start potwierdzić na urządzeniu; prolog audio nieobecny |
 | WORLD.01 | WORLD 1:1 — specyfikacja i manifest geograficzny | SPECIFICATION WRITTEN | kontrakt, 8 rejestrów lokacji, walidacja |
 | WORLD.02 | Dopasowanie scen książki do miast i lokalizacji | NOT STARTED | każda użyta lokacja ma rozdział/stronę/datę |
-| WORLD.03 | Geospatial ETL EPSG PL/CZ, sektorowanie GIS | ETL IMPLEMENTED, CI VERIFIED; SOURCE DATA PENDING | testy transformacji i clippingu: run 39458562495; brak pełnych danych GIS miast |
-| WORLD.04 | Miasta 1:1: Cieszyn/Český Těšín i lokacje pozostałych miast | NOT STARTED | kontrola siatki ulic, budynków, foto-match |
+| WORLD.03 | Geospatial ETL EPSG PL/CZ + import bieżących danych OSM | PARTIAL REAL SOURCE IMPORT, CI VERIFIED | OSM: 397 budynków, 145 dróg, 13 sektorów; run 39466656392 i 39467589299 |
+| WORLD.03b | Walidowany runtime płaskich obrysów Godot | DONE FOR CURRENT 2D SUBSETS | 2 osobne warstwy, 13 sektorów, test ID; Godot run 39468814086 |
+| WORLD.04 | Pełne historyczne miasta 1:1: Cieszyn/Český Těšín i pozostałe | NOT STARTED (ONLY 2D PARTIAL BASEMAP) | komplet miasta, źródłowe wysokości, teren, fotogrametria i foto-match |
 | WORLD.05 | Historyczne warianty i streaming sektorów Android | NOT STARTED | profil urządzenia + zatwierdzona rekonstrukcja |
-| WORLD.06 | Debugowy podgląd 2 punktów w skali metrycznej na Android | BUILD VERIFIED; DEVICE UNTESTED | Godot scene run 39458975306; APK run 39458975061 |
+| WORLD.06 | Debugowy podgląd metrycznych 2 ratuszy i 13 kafli OSM PL/CZ na Android | BUILD VERIFIED; DEVICE UNTESTED | strict Godot runtime run 39468814086; APK run 39468813871 |
 | G3 | Modele 3D, facial rig, animacje, tatuaże | NOT STARTED | zatwierdzone modele z wydajnością LOD |
 | G4 | 70 pełnych grywalnych rozdziałów | NOT STARTED | scenariusze, sceny, decyzje, aktorstwo, testy |
 | G5 | Galeria, 3 DLC, PL/EN, audio source-lock | NOT STARTED | pozytywne testy i zatwierdzenia mediów |
-| G6 | Eksport APK, testy urządzeń, podpis produkcyjny | DEBUG APK VERIFIED; RELEASE NOT STARTED | artifact 12281548510; run 39458975061; urządzenia i release pending |
+| G6 | Eksport APK, testy urządzeń, podpis produkcyjny | DEBUG APK VERIFIED; RELEASE NOT STARTED | artifact 12286058550; run 39468813871; urządzenia i release pending |
 
 ## Reguła statusów
 `DONE` tylko dla faktycznie zapisanych i sprawdzonych artefaktów. `DRAFT` nie oznacza akceptacji. `NOT STARTED` nie jest równoznaczne z niemożliwością. Godot CI uruchomił scenę i wyeksportował debug APK. Nie jest to benchmark telefonu, test dotyku, ani dowód osiągnięcia jakości AAA.
 
 ## Następny etap
-Priorytet: etap WORLD.02 — mapowanie scen książki na konkretne miejsca i daty, a następnie WORLD.03 — pozyskanie rzeczywistych warstw dróg, obrysów budynków, NMT i rekonstrukcji historycznych z GUGiK/ČÚZK. Działający ETL jest przygotowany, ale zawiera obecnie wyłącznie 2 georeferencyjne punkty kontrolne. Równolegle: rzeczywisty test istniejącego APK na telefonie (instalacja, klatki, interfejs, zapis, zdjęcia i powrót do gry). Potem wymiana scenografii testowej na modele produkcyjne. Równolegle odseparować chronione zasoby, skorygować scenariusz na podstawie wersji książki zatwierdzonej do ekranizacji i ukończyć pipeline modeli.
+Priorytet: etap WORLD.02 — mapowanie scen książki na konkretne miejsca i daty, a następnie WORLD.03 — pozyskanie rzeczywistych warstw dróg, obrysów budynków, NMT i rekonstrukcji historycznych z GUGiK/ČÚZK. Działający ETL pozyskał dwa bieżące wycinki OSM (397 obrysów budynków, 145 dróg), ale wciąż nie ma pełnych danych miast, wysokości, LiDAR ani historycznych wariantów. Demo Godot renderuje obrysy bez zmyślonych kondygnacji. Równolegle: rzeczywisty test istniejącego APK na telefonie (instalacja, klatki, interfejs, zapis, zdjęcia i powrót do gry). Potem wymiana scenografii testowej na modele produkcyjne. Równolegle odseparować chronione zasoby, skorygować scenariusz na podstawie wersji książki zatwierdzonej do ekranizacji i ukończyć pipeline modeli.
