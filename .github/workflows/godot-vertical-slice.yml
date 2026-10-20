@@ -32,3 +32,5 @@ jobs:
         run: godot --headless --path godot --quit-after 30
       - name: Validate transborder world preview scene
         run: godot --headless --path godot --quit-after 30 --scene res://scenes/world_preview.tscn
+      - name: Validate actual OSM geometry import and metric outlines
+        run: godot --headless --path godot --script res://tests/test_osm_preview.gd

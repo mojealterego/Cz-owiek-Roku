@@ -12,12 +12,17 @@ var camera_height: float = 900.0
 var title_label: Label
 var distance_label: Label
 var scene_valid: bool = false
+var osm_layer: Node3D
+var base_center: Vector3 = Vector3(-274.3, 0.0, 101.1)
+var show_osm: bool = true
 
 func _ready() -> void:
 	var references: Dictionary = _read_references()
 	_setup_world()
 	_create_grid()
 	_create_ui()
+	osm_layer = preload("res://scripts/osm_preview_layer.gd").new()
+	add_child(osm_layer)
 	if references.is_empty():
 		distance_label.text = "ERROR: REFERENCE DATA INVALID"
 		push_error("World preview requires validated georeferenced data.")
@@ -28,7 +33,7 @@ func _ready() -> void:
 	var start: Vector3 = _position_from_record(p[0])
 	var destination: Vector3 = _position_from_record(p[1])
 	var d: float = start.distance_to(destination)
-	distance_label.text = "Cieszyn — Český Těšín: %.3f m  |  WGS84 / AEQD" % d
+	distance_label.text = "Cieszyn — Český Těšín: %.3f m | OSM 2026: %s obrysów budynków, %s dróg" % [d, str(osm_layer.building_ids.size()), str(osm_layer.road_ids.size())]
 	scene_valid = true
 	_refresh_camera()
 
@@ -150,6 +155,9 @@ func _create_ui() -> void:
 	dock.offset_top = -75
 	dock.alignment = BoxContainer.ALIGNMENT_CENTER
 	root.add_child(dock)
+	_add_button(dock, "RYNEK — OSM", _focus_rynek)
+	_add_button(dock, "OBA RATUSZE", _focus_both)
+	_add_button(dock, "OSM: WŁ./WYŁ.", _toggle_osm)
 	_add_button(dock, "− / ODDAL", func() -> void: _zoom(1.25))
 	_add_button(dock, "+ / ZBLIŻ", func() -> void: _zoom(0.8))
 	_add_button(dock, "POWRÓT / BACK", func() -> void: get_tree().change_scene_to_file("res://scenes/main.tscn"))
@@ -184,3 +192,18 @@ func _pan(delta: Vector2) -> void:
 	center.x -= delta.x * metres_per_pixel
 	center.z -= delta.y * metres_per_pixel
 	_refresh_camera()
+
+func _focus_rynek() -> void:
+	center = Vector3(0, 0, 0)
+	camera_height = 270.0
+	_refresh_camera()
+
+func _focus_both() -> void:
+	center = base_center
+	camera_height = 900.0
+	_refresh_camera()
+
+func _toggle_osm() -> void:
+	show_osm = not show_osm
+	if osm_layer != null:
+		osm_layer.visible = show_osm
