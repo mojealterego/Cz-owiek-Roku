@@ -61,7 +61,7 @@ jobs:
       - name: Confirm actual Godot project config before export
         run: godot --headless --path godot --script res://tests/print_config.gd
       - name: Export debug APK ARM64
-        run: godot --verbose --headless --path godot --export-debug Android godot/build/man-of-the-year-debug.apk
+        run: godot --verbose --headless --path godot --export-debug Android "$GITHUB_WORKSPACE/godot/build/man-of-the-year-debug.apk"
       - name: Verify APK archive
         run: |
           test -s godot/build/man-of-the-year-debug.apk
