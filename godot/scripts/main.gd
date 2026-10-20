@@ -18,7 +18,7 @@ const TEXT := {
 		"act": "AKT I — PĘKNIĘCIE", "act_quote": "Każde pęknięcie zaczyna się od milczenia.",
 		"chapter": "ROZDZIAŁ I", "chapter_quote": "„Piekło to inni.” — Jean-Paul Sartre",
 		"chapter_note": "(Albo po prostu Cieszyn w grudniowy wieczór.) — Andrzej, Pamiętnik Sprawcy, Cieszyn 2023 r.",
-		"enter": "WEJDŹ ZA KULISY", "inspect": "ZBADAJ", "photo": "ZDJĘCIE", "gallery": "GALERIA",
+		"enter": "WEJDŹ ZA KULISY", "inspect": "ZBADAJ", "photo": "ZDJĘCIE", "gallery": "GALERIA", "geodata": "MAPA 1:1 — PUNKTY KONTROLNE",
 		"movement": "Ruch: WASD / przyciski dotykowe. Podejdź do aparatu, programu gali lub fotografii.",
 		"camera": "Aparat fotograficzny — narzędzie obserwacji i przyszłych dowodów.",
 		"gala": "Program gali — sceniczna fasada sukcesu i lista gości.",
@@ -41,7 +41,7 @@ const TEXT := {
 		"act": "ACT I — THE FRACTURE", "act_quote": "Every fracture begins with silence.",
 		"chapter": "CHAPTER I", "chapter_quote": "“Hell is other people.” — Jean-Paul Sartre",
 		"chapter_note": "(Or simply Cieszyn on a December evening.) — Andrzej, The Perpetrator's Diary, Cieszyn 2023.",
-		"enter": "STEP BEHIND THE CURTAIN", "inspect": "INSPECT", "photo": "TAKE PHOTO", "gallery": "GALLERY",
+		"enter": "STEP BEHIND THE CURTAIN", "inspect": "INSPECT", "photo": "TAKE PHOTO", "gallery": "GALLERY", "geodata": "1:1 MAP — REFERENCE POINTS",
 		"movement": "Move: WASD / touch buttons. Approach the camera, gala program or photograph.",
 		"camera": "Camera — a tool for observation and future evidence.",
 		"gala": "Gala program — the public façade of success and a list of guests.",
@@ -231,6 +231,7 @@ func _show_menu() -> void:
 		_button(t("continue"), container, _continue_game)
 	_button("POLSKI / ENGLISH", container, _toggle_language)
 	_button(t("gallery"), container, _show_gallery)
+	_button(t("geodata"), container, _open_world_reference)
 
 func _toggle_language() -> void:
 	state.language = "en" if state.language == "pl" else "pl"
@@ -426,3 +427,6 @@ func _show_gallery() -> void:
 		else:
 			_show_menu()
 	)
+
+func _open_world_reference() -> void:
+	get_tree().change_scene_to_file("res://scenes/world_preview.tscn")

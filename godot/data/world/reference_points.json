@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "status": "TWO_GEOREFERENCED_LANDMARKS_NOT_A_CITY_MODEL",
+  "anchor_wgs84": {
+    "lon": 18.6332106,
+    "lat": 49.74816
+  },
+  "projection": "LOCAL_WGS84_AEQD",
+  "units": "meters",
+  "grid_size_m": 256,
+  "source": "geodata/fixtures/transborder_reference_points.geojson",
+  "points": [
+    {
+      "id": "CIESZYN_TOWN_HALL",
+      "city": "Cieszyn",
+      "label": "RATUSZ — CIESZYN",
+      "east_m": 0,
+      "north_m": 0,
+      "lon": 18.6332106,
+      "lat": 49.74816
+    },
+    {
+      "id": "CESKY_TESIN_TOWN_HALL",
+      "city": "Český Těšín",
+      "label": "RADNICE — ČESKÝ TĚŠÍN",
+      "east_m": -548.6195684520549,
+      "north_m": -202.2036430235732,
+      "lon": 18.62559852404365,
+      "lat": 49.746341767306085
+    }
+  ]
+}
