@@ -18,7 +18,8 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - uses: android-actions/setup-android@v3
+      - name: Verify preinstalled Android SDK
+        run: test -x "$ANDROID_HOME/platform-tools/adb" && echo "SDK=$ANDROID_HOME"
       - uses: chickensoft-games/setup-godot@v2
         with:
           version: 4.5.2
