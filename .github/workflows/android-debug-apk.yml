@@ -1,0 +1,61 @@
+name: Android debug APK
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'godot/**'
+      - '.github/workflows/android-debug-apk.yml'
+permissions:
+  contents: read
+jobs:
+  android-debug:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.5.2
+          use-dotnet: false
+          include-templates: true
+      - name: Configure Android export and ephemeral debug signing
+        shell: bash
+        run: |
+          mkdir -p "$HOME/.android" "$HOME/.config/godot" godot/build
+          if [ ! -f "$HOME/.android/debug.keystore" ]; then
+            keytool -genkeypair -v -keystore "$HOME/.android/debug.keystore" -storepass android -keypass android -alias androiddebugkey -dname "CN=Android Debug,O=Man of the Year,C=PL" -keyalg RSA -keysize 2048 -validity 3650
+          fi
+          cat > "$HOME/.config/godot/editor_settings-4.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+          [resource]
+          export/android/android_sdk_path = "$ANDROID_HOME"
+          export/android/java_sdk_path = "$JAVA_HOME"
+          export/android/debug_keystore = "$HOME/.android/debug.keystore"
+          export/android/debug_keystore_user = "androiddebugkey"
+          export/android/debug_keystore_pass = "android"
+          EOF
+          echo "GODOT_ANDROID_KEYSTORE_DEBUG_PATH=$HOME/.android/debug.keystore" >> "$GITHUB_ENV"
+          echo "GODOT_ANDROID_KEYSTORE_DEBUG_USER=androiddebugkey" >> "$GITHUB_ENV"
+          echo "GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD=android" >> "$GITHUB_ENV"
+      - name: Import project
+        run: godot --headless --path godot --editor --import --quit
+      - name: Export debug APK ARM64
+        run: godot --headless --path godot --export-debug Android godot/build/man-of-the-year-debug.apk
+      - name: Verify APK archive
+        run: |
+          test -s godot/build/man-of-the-year-debug.apk
+          unzip -tq godot/build/man-of-the-year-debug.apk | tail -1
+          sha256sum godot/build/man-of-the-year-debug.apk
+          ls -lh godot/build/man-of-the-year-debug.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: man-of-the-year-android-debug
+          path: godot/build/man-of-the-year-debug.apk
+          if-no-files-found: error
+          retention-days: 7
