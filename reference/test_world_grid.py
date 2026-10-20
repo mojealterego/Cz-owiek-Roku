@@ -43,7 +43,7 @@ class WorldGridTests(unittest.TestCase):
         self.assertTrue(doc["geometry_contract"]["no_artificial_distance_compression"])
         self.assertEqual(doc["geometry_contract"]["canonical_tile_size_m"], TILE_SIZE_M)
         self.assertEqual(doc["mode"], "PRODUCTION_REQUIREMENT_NOT_IMPLEMENTED")
-        self.assertEqual(doc["geometry_contract"]["coordinate_transform_status"], "NOT_IMPLEMENTED")
+        self.assertEqual(doc["geometry_contract"]["coordinate_transform_status"], "IMPLEMENTED_IN_GEOETL_CI_TESTED_FULL_CITY_IMPORT_PENDING")
         ids = [item["id"] for item in doc["locations"]]
         self.assertEqual(len(ids), len(set(ids)))
         self.assertTrue(EXPECTED_CITIES.issubset(ids))

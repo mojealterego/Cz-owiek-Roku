@@ -10,6 +10,15 @@ Repozytorium produkcyjne adaptacji książki Andrzeja Mikulskiego. Przewidywany 
 
 Miasta i miejsca fabuły muszą być **geograficznie odwzorowane w rzeczywistej skali metrycznej 1:1**, z zgodnością architektury oraz dat 2023–2025. Obecna scena gali to **techniczna makieta**, nie rekonstrukcja żadnego miasta. **[Specyfikacja WORLD 1:1](docs/WORLD_1_TO_1_SPECIFICATION.md)**, [manifest lokalizacji](data/world/city_reconstruction_manifest.json) i [testy przestrzenne](reference/test_world_grid.py) definiują obowiązkowy etap produkcji i bramkę odbioru. Bez rzeczywistych danych przestrzennych, pozwoleń, foto-referencji i testów nie wolno oznaczyć świata jako ukończonego.
 
+### Obecny postęp WORLD.03
+
+- [Importer GeoJSON PL/CZ w metrach](geodata/geoetl.py) — przeliczenie EPSG:4326/2180/5514, kontrola licencji i pochodzenia, sektorowanie bez kompresji odległości.
+- [Instrukcja importu GIS](docs/WORLD_1_TO_1_ETL_IMPLEMENTATION.md) — komendy, wejścia i ograniczenia.
+- [Weryfikowane publiczne punkty ratuszy](geodata/fixtures/transborder_reference_points.geojson) — 2 punkty, nie kompletne dane o miastach.
+- [Podgląd kontrolny w Godot](godot/scenes/world_preview.tscn) — 2 punkty w rzeczywistej odległości, siatka 256 m, powiększanie i przesuwanie.
+
+**Uwaga:** wciąż nie pozyskano obrysów budynków, dróg, terenu ani danych historycznych. Nie istnieją modele Cieszyna/Czeskiego Cieszyna 1:1.
+
 ## Zakres źródłowy
 
 | Akt | Nazwa | Rozdziały |
@@ -32,14 +41,14 @@ Książka (409 stron) jest kanonem. Najnowsze decyzje autora mają pierwszeństw
 
 ## Pobierz i uruchom APK Android
 
-- [GitHub Actions — poprawny build APK i zapis artefaktu](https://github.com/mojealterego/Cz-owiek-Roku/actions/runs/39450159089). Otwórz `Artifacts → man-of-the-year-android-debug`, pobierz ZIP, rozpakuj `man-of-the-year-debug.apk`.
-- Format: Android ARM64, kompilacja debug, 27 616 307 B.
-- SHA-256 pliku APK: `417dd0fb9605b5c241eb0ccd93f00735a16460a3a18094c69c43237b9cbb1184`.
+- [GitHub Actions — poprawny build APK i zapis artefaktu](https://github.com/mojealterego/Cz-owiek-Roku/actions/runs/39458975061). Otwórz `Artifacts → man-of-the-year-android-debug`, pobierz ZIP, rozpakuj `man-of-the-year-debug.apk`.
+- Format: Android ARM64, kompilacja debug, 27 624 965 B.
+- SHA-256 pliku APK: `52e3b54f02df6110006b96dd0dee6665b72e266158fc21ee2d472ad550710b2e`.
 - Zainstaluj debug APK na urządzeniu obsługującym ARM64 i OpenGL ES 3.0. Jest to eksperymentalny build do odbioru, a nie wersja produkcyjna. Jeśli poprzedni debug APK ma inny klucz podpisu, konieczne może być odinstalowanie poprzedniej wersji (co usuwa jej lokalne dane).
 
 ## Natywny prototyp: zawartość
 
-W katalogu [godot/](godot/) są: sala gali z uproszczoną geometrią 3D, ekran tytułowy PL/EN, ekran prologu bez chronionego nagrania, rozsuwana czerwona kurtyna, karta Aktu I i Rozdziału 1, sterowanie dotykowe, oględziny obiektów, wykonanie i przegląd fotografii, dwie odrębne decyzje z checkpointem. Potwierdzono uruchomienie projektu przez 30 klatek w środowisku CI bez GPU i 14 asercji silnika Godot. Testy CI nie dowodzą prawidłowego działania dotyku i grafiki na telefonie.
+W katalogu [godot/](godot/) są: sala gali z uproszczoną geometrią 3D, ekran tytułowy PL/EN, ekran prologu bez chronionego nagrania, rozsuwana czerwona kurtyna, karta Aktu I i Rozdziału 1, sterowanie dotykowe, oględziny obiektów, wykonanie i przegląd fotografii, dwie odrębne decyzje z checkpointem oraz podgląd dwóch georeferencjonowanych ratuszy. Podgląd nie odtwarza geometrii budynków ani ulic. Potwierdzono uruchomienie projektu przez 30 klatek w środowisku CI bez GPU i 14 asercji silnika Godot. Testy CI nie dowodzą prawidłowego działania dotyku i grafiki na telefonie.
 
 ## Uruchomienie sprawdzalnej części
 

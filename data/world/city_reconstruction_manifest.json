@@ -16,8 +16,11 @@
       "2024",
       "2025"
     ],
-    "coordinate_transform_status": "NOT_IMPLEMENTED",
-    "streaming_status": "NOT_IMPLEMENTED"
+    "coordinate_transform_status": "IMPLEMENTED_IN_GEOETL_CI_TESTED_FULL_CITY_IMPORT_PENDING",
+    "streaming_status": "NOT_IMPLEMENTED",
+    "preview_status": "TWO_PUBLIC_LANDMARK_REFERENCE_POINTS_ONLY",
+    "preview_godot_status": "SCENE_HEADLESS_VERIFIED_PHYSICAL_ANDROID_UNTESTED",
+    "source_building_road_terrain_status": "NOT_IMPORTED"
   },
   "proposed_acceptance_tolerances": {
     "note": "Targets to approve after evaluating source data accuracy; NOT achieved measurements.",

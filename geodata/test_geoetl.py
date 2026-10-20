@@ -129,5 +129,22 @@ class GeoETLTests(unittest.TestCase):
                 call_build(out)
 
 
+    def test_godot_preview_positions_match_projected_source_to_centimetre(self):
+        raw = json.loads(POINTS.read_text(encoding="utf-8"))
+        world = Path(__file__).resolve().parents[1] / "godot" / "data" / "world" / "reference_points.json"
+        preview = json.loads(world.read_text(encoding="utf-8"))
+        self.assertEqual(preview["status"], "TWO_GEOREFERENCED_LANDMARKS_NOT_A_CITY_MODEL")
+        self.assertEqual(preview["units"], "meters")
+        self.assertEqual(preview["grid_size_m"], SIZE_M)
+        self.assertEqual(preview["anchor_wgs84"], {"lon": PL[0], "lat": PL[1]})
+        landmarks = {f["id"]: f["geometry"]["coordinates"] for f in raw["features"]}
+        placed = {p["id"]: p for p in preview["points"]}
+        self.assertEqual(set(landmarks), set(placed))
+        transformer = metric_transformer("EPSG:4326", *PL)
+        for name, lon_lat in landmarks.items():
+            east, north = transformer.transform(*lon_lat)
+            self.assertAlmostEqual(placed[name]["east_m"], east, delta=0.01)
+            self.assertAlmostEqual(placed[name]["north_m"], north, delta=0.01)
+
 if __name__ == "__main__":
     unittest.main()
