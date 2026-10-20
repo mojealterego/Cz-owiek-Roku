@@ -30,7 +30,7 @@ SAFE_ID = re.compile(r"^[A-Za-z][A-Za-z0-9_.-]{0,79}$")
 GEOMETRIES = {"Point", "LineString", "MultiLineString", "Polygon", "MultiPolygon"}
 VALID_CRS = {"EPSG:4326", "EPSG:2180", "EPSG:5514"}
 PUBLIC_LICENSES = {"ODbL-1.0", "CC0-1.0"}
-VALID_YEARS = {"2023", "2024", "2025"}
+VALID_YEARS = {"2023", "2024", "2025", "2026"}
 
 
 class GeoETLError(ValueError):
@@ -156,7 +156,7 @@ def build(
     if not SAFE_ID.fullmatch(city_id) or not SAFE_ID.fullmatch(source_id):
         raise GeoETLError("Unsafe city/source identifier")
     if year not in VALID_YEARS:
-        raise GeoETLError("Only book-era year 2023, 2024 or 2025 permitted")
+        raise GeoETLError("Only 2023–2026 source snapshot years permitted")
     if not source_url.startswith(("https://", "http://")) or len(source_url) > 2048:
         raise GeoETLError("Provenance URL missing/invalid")
     if not isinstance(license_id, str) or len(license_id) > 80:
@@ -193,7 +193,8 @@ def build(
             tiles[tile].append(piece)
     summary = {
         "schema_version": 1, "type": "WORLD_METRIC_TILES",
-        "build_status": "PREVIEW_ONLY_NOT_HISTORICALLY_VERIFIED",
+        "build_status": ("CURRENT_BASEMAP_NOT_HISTORICALLY_VERIFIED" if year == "2026"
+                         else "PREVIEW_ONLY_NOT_HISTORICALLY_VERIFIED"),
         "city_id": city_id, "historical_year": year,
         "tile_size_m": SIZE_M,
         "anchor_wgs84": {"lon": anchor_lon, "lat": anchor_lat},

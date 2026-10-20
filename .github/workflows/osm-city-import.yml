@@ -1,0 +1,95 @@
+name: Import public OSM building and road geometry
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'geodata/osm_extract.py'
+      - 'geodata/test_osm_extract.py'
+      - 'geodata/fixtures/osm_three_real_buildings.xml'
+      - '.github/workflows/osm-city-import.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install geospatial dependencies
+        run: python -m pip install -r geodata/requirements.txt
+      - name: Test source geometry and license metadata
+        run: python -m unittest geodata.test_osm_extract geodata.test_geoetl -v
+      - name: Fetch bounded real OSM XML and convert ways to source-preserving GeoJSON
+        run: |
+          mkdir -p /tmp/manoftheyear_osm_raw
+          python -m geodata.osm_extract \
+            --fetch \
+            --raw-xml /tmp/manoftheyear_osm_raw/cieszyn.osm \
+            --geojson geodata/snapshots/cieszyn_rynek_osm_2026.geojson \
+            --bbox 18.6310 49.7468 18.6340 49.7492
+      - name: Convert actual outlines into real-scale 256-metre tiles
+        run: |
+          python -m geodata.geoetl \
+            --input geodata/snapshots/cieszyn_rynek_osm_2026.geojson \
+            --output-dir godot/data/world/cieszyn_rynek_osm_2026 \
+            --city-id CIESZYN_RYNEK \
+            --source-crs EPSG:4326 \
+            --anchor-lon 18.6332106 --anchor-lat 49.74816 \
+            --source-id OPENSTREETMAP_2026_CIESZYN_RYNEK \
+            --source-url 'https://api.openstreetmap.org/api/0.6/map?bbox=18.6310%2C49.7468%2C18.6340%2C49.7492' \
+            --license ODbL-1.0 \
+            --year 2026
+      - name: Assert real geometry imported, not a synthetic city
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          p = Path('geodata/snapshots/cieszyn_rynek_osm_2026.geojson')
+          g = json.loads(p.read_text())
+          counts = g['metadata']['features']
+          assert counts['buildings'] >= 50, counts
+          assert counts['roads'] >= 5, counts
+          d = json.loads(Path('godot/data/world/cieszyn_rynek_osm_2026/manifest.json').read_text())
+          assert d['build_status'] == 'CURRENT_BASEMAP_NOT_HISTORICALLY_VERIFIED'
+          assert d['source_features'] == sum(counts.values())
+          assert d['tile_count'] >= 2
+          assert d['source']['license'] == 'ODbL-1.0'
+          print('TRUE OSM FEATURES:', counts, 'TILES:', d['tile_count'])
+          PY
+      - name: Write ODbL derived database attribution and share-alike notice
+        run: |
+          cat > godot/data/world/cieszyn_rynek_osm_2026/ATTRIBUTION.txt <<'EOF'
+          © OpenStreetMap contributors.
+          Source https://www.openstreetmap.org/ ; raw API extract linked in manifest.
+          Source/database license Open Database License (ODbL) 1.0:
+          https://opendatacommons.org/licenses/odbl/1-0/
+          Geospatial subset in this folder and the matching GeoJSON extract
+          are offered as a derived database under the ODbL 1.0.
+          These data are NOT historically validated for 2023–2025 and
+          are NOT field-surveyed building heights, terrain, or facades.
+          EOF
+      - name: Commit attributed current OpenStreetMap preview to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add geodata/snapshots/cieszyn_rynek_osm_2026.geojson godot/data/world/cieszyn_rynek_osm_2026/
+          if git diff --cached --quiet; then
+            echo 'No new geodata changes.'
+          else
+            git commit -m "data(world): import attributed current OSM Cieszyn streets and building outlines"
+            git push origin HEAD:main
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cieszyn-rynek-osm-2026-metric-geodata
+          path: |
+            geodata/snapshots/cieszyn_rynek_osm_2026.geojson
+            godot/data/world/cieszyn_rynek_osm_2026/
+          retention-days: 14
+          if-no-files-found: error

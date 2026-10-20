@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="ManOfTheYear-Test-Verified-Extract">
+  <!-- Three real publicly reported OSM outlines in Cieszyn.
+       Not a substitute for the API source or a historical reconstruction.
+       © OpenStreetMap contributors, ODbL 1.0 -->
+  <node id="1" lat="49.7487597" lon="18.6315029"/>
+  <node id="2" lat="49.7486755" lon="18.6314374"/>
+  <node id="3" lat="49.7486297" lon="18.6315703"/>
+  <node id="4" lat="49.7487152" lon="18.6316357"/>
+  <node id="5" lat="49.7489227" lon="18.6321262"/>
+  <node id="6" lat="49.7490810" lon="18.6322230"/>
+  <node id="7" lat="49.7491187" lon="18.6320750"/>
+  <node id="8" lat="49.7489557" lon="18.6319851"/>
+  <node id="9" lat="49.7476566" lon="18.6326098"/>
+  <node id="10" lat="49.7476075" lon="18.6325742"/>
+  <node id="11" lat="49.7475699" lon="18.6326943"/>
+  <node id="12" lat="49.7476175" lon="18.6327316"/>
+  <way id="198560340"><nd ref="1"/><nd ref="2"/><nd ref="3"/><nd ref="4"/><nd ref="1"/><tag k="building" v="yes"/></way>
+  <way id="198560695"><nd ref="5"/><nd ref="6"/><nd ref="7"/><nd ref="8"/><nd ref="5"/><tag k="building" v="apartments"/></way>
+  <way id="198726576"><nd ref="9"/><nd ref="10"/><nd ref="11"/><nd ref="12"/><nd ref="9"/><tag k="building" v="garages"/></way>
+  <way id="999999"><nd ref="1"/><nd ref="3"/><tag k="highway" v="residential"/><tag k="name" v="TEST ONLY: not a verified road"/></way>
+</osm>
