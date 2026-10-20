@@ -28,9 +28,17 @@ jobs:
         run: godot --headless --path godot --editor --import --quit
       - name: Run state contract checks
         run: godot --headless --path godot --script res://tests/test_state.gd
-      - name: Boot main scene for 30 simulation frames
-        run: godot --headless --path godot --quit-after 30
+      - name: Boot main scene and reject runtime script errors
+        shell: bash
+        run: |
+          set -o pipefail
+          godot --headless --path godot --quit-after 40 2>&1 | tee /tmp/moty-main.log
+          if grep -q 'SCRIPT ERROR:' /tmp/moty-main.log; then exit 1; fi
       - name: Validate transborder world preview scene
-        run: godot --headless --path godot --quit-after 30 --scene res://scenes/world_preview.tscn
+        shell: bash
+        run: |
+          set -o pipefail
+          godot --headless --path godot --quit-after 40 --scene res://scenes/world_preview.tscn 2>&1 | tee /tmp/moty-world.log
+          if grep -q 'SCRIPT ERROR:' /tmp/moty-world.log; then exit 1; fi
       - name: Validate actual OSM geometry import and metric outlines
         run: godot --headless --path godot --script res://tests/test_osm_preview.gd

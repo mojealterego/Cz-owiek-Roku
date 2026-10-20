@@ -83,7 +83,7 @@ func t(key: String) -> String:
 func _ready() -> void:
 	_build_environment()
 	_build_interface()
-	_show_menu()
+	call_deferred("_show_menu")
 
 func _make_material(color: Color, metallic: float = 0.0) -> StandardMaterial3D:
 	var material := StandardMaterial3D.new()
@@ -183,6 +183,8 @@ func _button(message: String, into: Node, action: Callable) -> Button:
 	return btn
 
 func _build_interface() -> void:
+	if overlay != null and is_instance_valid(overlay):
+		return
 	var layer := CanvasLayer.new()
 	add_child(layer)
 	interface = Control.new()
@@ -193,6 +195,8 @@ func _build_interface() -> void:
 	interface.add_child(overlay)
 
 func _clear_overlay() -> void:
+	if overlay == null or not is_instance_valid(overlay):
+		_build_interface()
 	for child in overlay.get_children():
 		child.queue_free()
 	status_label = null
@@ -292,6 +296,8 @@ func _show_chapter_card() -> void:
 	_button(t("enter"), panel, _enter_world)
 
 func _enter_world() -> void:
+	if overlay == null or not is_instance_valid(overlay):
+		_build_interface()
 	phase = "EXPLORATION"
 	_clear_overlay()
 	status_label = _label(t("movement"), 18)
