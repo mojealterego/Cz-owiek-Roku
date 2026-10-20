@@ -4,7 +4,7 @@ extends Node3D
 
 const REFERENCE_PATH := "res://data/world/reference_points.json"
 const TILE_SIZE_M := 256.0
-const PREVIEW_STATUS := "2 GEOREFERENCED POINTS — THIS IS NOT A RECREATED CITY"
+const PREVIEW_STATUS := "OSM © CONTRIBUTORS / ODbL 1.0 • MAPA 2026, NIE HISTORYCZNE MIASTA"
 
 var view_camera: Camera3D
 var center: Vector3 = Vector3(-274.3, 0.0, 101.1)
@@ -13,6 +13,7 @@ var title_label: Label
 var distance_label: Label
 var scene_valid: bool = false
 var osm_layer: Node3D
+var cz_layer: Node3D
 var base_center: Vector3 = Vector3(-274.3, 0.0, 101.1)
 var show_osm: bool = true
 
@@ -23,6 +24,11 @@ func _ready() -> void:
 	_create_ui()
 	osm_layer = preload("res://scripts/osm_preview_layer.gd").new()
 	add_child(osm_layer)
+	cz_layer = preload("res://scripts/osm_preview_layer.gd").new()
+	cz_layer.world_root = "res://data/world/cesky_tesin_center_osm_2026"
+	cz_layer.expected_city_id = "CESKY_TESIN_CENTER"
+	cz_layer.expected_source_id = "OPENSTREETMAP_2026_CESKY_TESIN_CENTER"
+	add_child(cz_layer)
 	if references.is_empty():
 		distance_label.text = "ERROR: REFERENCE DATA INVALID"
 		push_error("World preview requires validated georeferenced data.")
@@ -33,7 +39,9 @@ func _ready() -> void:
 	var start: Vector3 = _position_from_record(p[0])
 	var destination: Vector3 = _position_from_record(p[1])
 	var d: float = start.distance_to(destination)
-	distance_label.text = "Cieszyn — Český Těšín: %.3f m | OSM 2026: %s obrysów budynków, %s dróg" % [d, str(osm_layer.building_ids.size()), str(osm_layer.road_ids.size())]
+	distance_label.text = "%.1f m między ratuszami | OSM 2026: %d budynków, %d dróg, 13 sektorów" % [
+		d, osm_layer.building_ids.size() + cz_layer.building_ids.size(),
+		osm_layer.road_ids.size() + cz_layer.road_ids.size()]
 	scene_valid = true
 	_refresh_camera()
 
@@ -148,19 +156,27 @@ func _create_ui() -> void:
 	distance_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	distance_label.add_theme_font_size_override("font_size", 20)
 	root.add_child(distance_label)
-	var dock := HBoxContainer.new()
-	dock.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-	dock.offset_left = 20
-	dock.offset_right = -20
-	dock.offset_top = -75
-	dock.alignment = BoxContainer.ALIGNMENT_CENTER
-	root.add_child(dock)
-	_add_button(dock, "RYNEK — OSM", _focus_rynek)
-	_add_button(dock, "OBA RATUSZE", _focus_both)
-	_add_button(dock, "OSM: WŁ./WYŁ.", _toggle_osm)
-	_add_button(dock, "− / ODDAL", func() -> void: _zoom(1.25))
-	_add_button(dock, "+ / ZBLIŻ", func() -> void: _zoom(0.8))
-	_add_button(dock, "POWRÓT / BACK", func() -> void: get_tree().change_scene_to_file("res://scenes/main.tscn"))
+	var actions := VBoxContainer.new()
+	actions.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
+	actions.offset_left = 15
+	actions.offset_right = -15
+	actions.offset_top = -132
+	actions.offset_bottom = -6
+	actions.add_theme_constant_override("separation", 4)
+	root.add_child(actions)
+	var places := HBoxContainer.new()
+	places.alignment = BoxContainer.ALIGNMENT_CENTER
+	actions.add_child(places)
+	_add_button(places, "CIESZYN — RYNEK", _focus_rynek)
+	_add_button(places, "ČESKÝ TĚŠÍN", _focus_cesky)
+	_add_button(places, "OBA RATUSZE", _focus_both)
+	var controls := HBoxContainer.new()
+	controls.alignment = BoxContainer.ALIGNMENT_CENTER
+	actions.add_child(controls)
+	_add_button(controls, "OSM: WŁ./WYŁ.", _toggle_osm)
+	_add_button(controls, "− / ODDAL", func() -> void: _zoom(1.25))
+	_add_button(controls, "+ / ZBLIŻ", func() -> void: _zoom(0.8))
+	_add_button(controls, "POWRÓT / BACK", func() -> void: get_tree().change_scene_to_file("res://scenes/main.tscn"))
 
 func _add_button(parent: Control, label_text: String, handler: Callable) -> void:
 	var button := Button.new()
@@ -198,6 +214,11 @@ func _focus_rynek() -> void:
 	camera_height = 270.0
 	_refresh_camera()
 
+func _focus_cesky() -> void:
+	center = Vector3(-548.6, 0.0, 202.2)
+	camera_height = 350.0
+	_refresh_camera()
+
 func _focus_both() -> void:
 	center = base_center
 	camera_height = 900.0
@@ -207,3 +228,5 @@ func _toggle_osm() -> void:
 	show_osm = not show_osm
 	if osm_layer != null:
 		osm_layer.visible = show_osm
+	if cz_layer != null:
+		cz_layer.visible = show_osm

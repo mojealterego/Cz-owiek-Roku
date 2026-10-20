@@ -3,9 +3,10 @@ extends Node3D
 ## Geometry is a flat, metrically accurate OUTLINE preview; no fictitious
 ## 3D heights, facades, historical verification or pretend city completion.
 
-const ROOT := "res://data/world/cieszyn_rynek_osm_2026"
+var world_root: String = "res://data/world/cieszyn_rynek_osm_2026"
 const TILE_SIZE_M := 256.0
-const REQUIRED_SOURCE_ID := "OPENSTREETMAP_2026_CIESZYN_RYNEK"
+var expected_city_id: String = "CIESZYN_RYNEK"
+var expected_source_id: String = "OPENSTREETMAP_2026_CIESZYN_RYNEK"
 
 var loaded: bool = false
 var building_ids: Dictionary = {}
@@ -19,14 +20,14 @@ func _ready() -> void:
 		push_warning("OSM geometry unavailable or invalid. Showing two control points only.")
 
 func load_tiles() -> bool:
-	var manifest_path: String = ROOT + "/manifest.json"
+	var manifest_path: String = world_root + "/manifest.json"
 	if not FileAccess.file_exists(manifest_path):
 		return false
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(manifest_path))
 	if not parsed is Dictionary:
 		return false
 	var manifest: Dictionary = parsed
-	if manifest.get("schema_version", 0) != 1 or manifest.get("city_id", "") != "CIESZYN_RYNEK":
+	if manifest.get("schema_version", 0) != 1 or manifest.get("city_id", "") != expected_city_id:
 		return false
 	if manifest.get("build_status", "") != "CURRENT_BASEMAP_NOT_HISTORICALLY_VERIFIED":
 		return false
@@ -34,7 +35,7 @@ func load_tiles() -> bool:
 		return false
 	if manifest.get("tile_size_m", 0) != 256 or manifest.get("historical_year", "") != "2026":
 		return false
-	if manifest.get("source", {}).get("id", "") != REQUIRED_SOURCE_ID:
+	if manifest.get("source", {}).get("id", "") != expected_source_id:
 		return false
 	if manifest.get("source", {}).get("license", "") != "ODbL-1.0":
 		return false
@@ -45,7 +46,7 @@ func load_tiles() -> bool:
 	for filename in names:
 		if not filename.ends_with(".json") or filename == "manifest.json":
 			continue
-		var path: String = ROOT + "/" + filename
+		var path: String = world_root + "/" + filename
 		var value: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
 		if not value is Dictionary:
 			return false
@@ -58,7 +59,7 @@ func load_tiles() -> bool:
 func _import_tile(tile: Dictionary) -> bool:
 	if tile.get("schema_version", 0) != 1 or tile.get("type", "") != "WORLD_METRIC_TILE":
 		return false
-	if tile.get("city_id", "") != "CIESZYN_RYNEK" or tile.get("year", "") != "2026":
+	if tile.get("city_id", "") != expected_city_id or tile.get("year", "") != "2026":
 		return false
 	if tile.get("tile_size_m", 0) != 256 or not tile.get("features") is Array:
 		return false

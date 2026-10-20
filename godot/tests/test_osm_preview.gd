@@ -19,6 +19,17 @@ func _run() -> void:
 	_check(layer.tile_count == 4, "Four metric tiles imported")
 	_check(layer.building_ids.size() == 117, "117 unique actual building IDs")
 	_check(layer.road_ids.size() == 66, "66 unique actual road IDs")
+	var cz = load("res://scripts/osm_preview_layer.gd").new()
+	cz.world_root = "res://data/world/cesky_tesin_center_osm_2026"
+	cz.expected_city_id = "CESKY_TESIN_CENTER"
+	cz.expected_source_id = "OPENSTREETMAP_2026_CESKY_TESIN_CENTER"
+	root.add_child(cz)
+	_check(cz.loaded, "Real Czech OSM layer loaded")
+	_check(cz.tile_count == 9, "Nine Czech geospatial 256m tiles")
+	_check(cz.building_ids.size() == 280, "280 real Czech building IDs")
+	_check(cz.road_ids.size() == 79, "79 real Czech road IDs")
+	_check(layer.building_ids.size() + cz.building_ids.size() == 397, "397 real PL and CZ building outlines")
+	_check(layer.road_ids.size() + cz.road_ids.size() == 145, "145 real PL and CZ road ways")
 	_check(layer.world_meshes.size() >= 4, "Buildings and roads have renderable lines")
 	var found_real_building: bool = layer.building_ids.has("OSM_W198560340")
 	_check(found_real_building, "Known real OSM building ID retained")
