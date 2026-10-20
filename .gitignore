@@ -1,0 +1,26 @@
+# Projekt UE5 / Android
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+.vs/
+.gradle/
+build/
+*.apk
+*.aab
+*.keystore
+*.jks
+*.p12
+.env
+.env.*
+!.env.example
+__pycache__/
+*.py[cod]
+.pytest_cache/
+# Chronione źródła i materiały osobowe nie mogą trafić do publicznego repo
+private/
+source_media/
+raw_recordings/
+original_documents/
+Czlowiek_roku_ebook*.pdf
+*ZUZIA*RECORDING*

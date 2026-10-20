@@ -1,0 +1,637 @@
+{
+  "schema_version": 1,
+  "description": "Machine-readable 70 canonical chapter identifiers. This is NOT a list of finished levels or protected source quotations.",
+  "total_chapters": 70,
+  "chapters": [
+    {
+      "id": "CH01",
+      "number": 1,
+      "act": "I",
+      "act_title": "PĘKNIĘCIE",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH02",
+      "number": 2,
+      "act": "I",
+      "act_title": "PĘKNIĘCIE",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH03",
+      "number": 3,
+      "act": "I",
+      "act_title": "PĘKNIĘCIE",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH04",
+      "number": 4,
+      "act": "I",
+      "act_title": "PĘKNIĘCIE",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH05",
+      "number": 5,
+      "act": "I",
+      "act_title": "PĘKNIĘCIE",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH06",
+      "number": 6,
+      "act": "I",
+      "act_title": "PĘKNIĘCIE",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH07",
+      "number": 7,
+      "act": "I",
+      "act_title": "PĘKNIĘCIE",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH08",
+      "number": 8,
+      "act": "I",
+      "act_title": "PĘKNIĘCIE",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH09",
+      "number": 9,
+      "act": "I",
+      "act_title": "PĘKNIĘCIE",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH10",
+      "number": 10,
+      "act": "I",
+      "act_title": "PĘKNIĘCIE",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH11",
+      "number": 11,
+      "act": "I",
+      "act_title": "PĘKNIĘCIE",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH12",
+      "number": 12,
+      "act": "I",
+      "act_title": "PĘKNIĘCIE",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH13",
+      "number": 13,
+      "act": "I",
+      "act_title": "PĘKNIĘCIE",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH14",
+      "number": 14,
+      "act": "I",
+      "act_title": "PĘKNIĘCIE",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH15",
+      "number": 15,
+      "act": "II",
+      "act_title": "WALKA Z MUREM",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH16",
+      "number": 16,
+      "act": "II",
+      "act_title": "WALKA Z MUREM",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH17",
+      "number": 17,
+      "act": "II",
+      "act_title": "WALKA Z MUREM",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH18",
+      "number": 18,
+      "act": "II",
+      "act_title": "WALKA Z MUREM",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH19",
+      "number": 19,
+      "act": "II",
+      "act_title": "WALKA Z MUREM",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH20",
+      "number": 20,
+      "act": "II",
+      "act_title": "WALKA Z MUREM",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH21",
+      "number": 21,
+      "act": "II",
+      "act_title": "WALKA Z MUREM",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH22",
+      "number": 22,
+      "act": "II",
+      "act_title": "WALKA Z MUREM",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH23",
+      "number": 23,
+      "act": "II",
+      "act_title": "WALKA Z MUREM",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH24",
+      "number": 24,
+      "act": "II",
+      "act_title": "WALKA Z MUREM",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH25",
+      "number": 25,
+      "act": "II",
+      "act_title": "WALKA Z MUREM",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH26",
+      "number": 26,
+      "act": "II",
+      "act_title": "WALKA Z MUREM",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH27",
+      "number": 27,
+      "act": "II",
+      "act_title": "WALKA Z MUREM",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH28",
+      "number": 28,
+      "act": "II",
+      "act_title": "WALKA Z MUREM",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH29",
+      "number": 29,
+      "act": "II",
+      "act_title": "WALKA Z MUREM",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH30",
+      "number": 30,
+      "act": "II",
+      "act_title": "WALKA Z MUREM",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH31",
+      "number": 31,
+      "act": "II",
+      "act_title": "WALKA Z MUREM",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH32",
+      "number": 32,
+      "act": "II",
+      "act_title": "WALKA Z MUREM",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH33",
+      "number": 33,
+      "act": "II",
+      "act_title": "WALKA Z MUREM",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH34",
+      "number": 34,
+      "act": "II",
+      "act_title": "WALKA Z MUREM",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH35",
+      "number": 35,
+      "act": "II",
+      "act_title": "WALKA Z MUREM",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH36",
+      "number": 36,
+      "act": "II",
+      "act_title": "WALKA Z MUREM",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH37",
+      "number": 37,
+      "act": "II",
+      "act_title": "WALKA Z MUREM",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH38",
+      "number": 38,
+      "act": "II",
+      "act_title": "WALKA Z MUREM",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH39",
+      "number": 39,
+      "act": "II",
+      "act_title": "WALKA Z MUREM",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH40",
+      "number": 40,
+      "act": "II",
+      "act_title": "WALKA Z MUREM",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH41",
+      "number": 41,
+      "act": "II",
+      "act_title": "WALKA Z MUREM",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH42",
+      "number": 42,
+      "act": "III",
+      "act_title": "BEZ PRAWA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH43",
+      "number": 43,
+      "act": "III",
+      "act_title": "BEZ PRAWA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH44",
+      "number": 44,
+      "act": "III",
+      "act_title": "BEZ PRAWA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH45",
+      "number": 45,
+      "act": "III",
+      "act_title": "BEZ PRAWA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH46",
+      "number": 46,
+      "act": "III",
+      "act_title": "BEZ PRAWA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH47",
+      "number": 47,
+      "act": "III",
+      "act_title": "BEZ PRAWA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH48",
+      "number": 48,
+      "act": "III",
+      "act_title": "BEZ PRAWA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH49",
+      "number": 49,
+      "act": "III",
+      "act_title": "BEZ PRAWA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH50",
+      "number": 50,
+      "act": "III",
+      "act_title": "BEZ PRAWA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH51",
+      "number": 51,
+      "act": "III",
+      "act_title": "BEZ PRAWA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH52",
+      "number": 52,
+      "act": "III",
+      "act_title": "BEZ PRAWA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH53",
+      "number": 53,
+      "act": "III",
+      "act_title": "BEZ PRAWA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH54",
+      "number": 54,
+      "act": "III",
+      "act_title": "BEZ PRAWA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH55",
+      "number": 55,
+      "act": "III",
+      "act_title": "BEZ PRAWA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH56",
+      "number": 56,
+      "act": "III",
+      "act_title": "BEZ PRAWA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH57",
+      "number": 57,
+      "act": "III",
+      "act_title": "BEZ PRAWA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH58",
+      "number": 58,
+      "act": "III",
+      "act_title": "BEZ PRAWA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH59",
+      "number": 59,
+      "act": "III",
+      "act_title": "BEZ PRAWA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH60",
+      "number": 60,
+      "act": "III",
+      "act_title": "BEZ PRAWA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH61",
+      "number": 61,
+      "act": "III",
+      "act_title": "BEZ PRAWA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH62",
+      "number": 62,
+      "act": "III",
+      "act_title": "BEZ PRAWA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH63",
+      "number": 63,
+      "act": "IV",
+      "act_title": "KONIEC ŚWIATŁA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH64",
+      "number": 64,
+      "act": "IV",
+      "act_title": "KONIEC ŚWIATŁA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH65",
+      "number": 65,
+      "act": "IV",
+      "act_title": "KONIEC ŚWIATŁA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH66",
+      "number": 66,
+      "act": "IV",
+      "act_title": "KONIEC ŚWIATŁA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH67",
+      "number": 67,
+      "act": "IV",
+      "act_title": "KONIEC ŚWIATŁA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH68",
+      "number": 68,
+      "act": "IV",
+      "act_title": "KONIEC ŚWIATŁA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH69",
+      "number": 69,
+      "act": "IV",
+      "act_title": "KONIEC ŚWIATŁA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "CH70",
+      "number": 70,
+      "act": "IV",
+      "act_title": "KONIEC ŚWIATŁA",
+      "source": "Czlowiek_roku_ebook 14Final.pdf",
+      "source_status": "REQUIRES_EDITORIAL_SOURCE_VALIDATION",
+      "implementation_status": "NOT_IMPLEMENTED"
+    }
+  ]
+}
