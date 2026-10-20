@@ -44,10 +44,22 @@ jobs:
           echo "GODOT_ANDROID_KEYSTORE_DEBUG_PATH=$HOME/.android/debug.keystore" >> "$GITHUB_ENV"
           echo "GODOT_ANDROID_KEYSTORE_DEBUG_USER=androiddebugkey" >> "$GITHUB_ENV"
           echo "GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD=android" >> "$GITHUB_ENV"
+      - name: Verify and install required SDK packages
+        shell: bash
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          echo "JAVA_HOME=$JAVA_HOME"
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          test -x "$SDKMANAGER"
+          "$SDKMANAGER" --sdk_root="$ANDROID_HOME" "platform-tools" "build-tools;35.0.0" "platforms;android-35"
+          test -f "$ANDROID_HOME/platforms/android-35/android.jar"
+          test -x "$ANDROID_HOME/build-tools/35.0.0/aapt2"
+          echo "Installed SDK packages verified."
+          find "$HOME/.local/share/godot/export_templates" -maxdepth 2 -type f -name 'android_debug.apk' -print
       - name: Import project
         run: godot --headless --path godot --editor --import --quit
       - name: Export debug APK ARM64
-        run: godot --headless --path godot --export-debug Android godot/build/man-of-the-year-debug.apk
+        run: godot --verbose --headless --path godot --export-debug Android godot/build/man-of-the-year-debug.apk
       - name: Verify APK archive
         run: |
           test -s godot/build/man-of-the-year-debug.apk
