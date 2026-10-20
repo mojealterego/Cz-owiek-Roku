@@ -1,0 +1,32 @@
+name: Godot Android slice validation
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'godot/**'
+      - '.github/workflows/godot-vertical-slice.yml'
+  pull_request:
+    paths:
+      - 'godot/**'
+      - '.github/workflows/godot-vertical-slice.yml'
+permissions:
+  contents: read
+jobs:
+  godot-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.5.2
+          use-dotnet: false
+          include-templates: false
+      - name: Verify editor
+        run: godot --version
+      - name: Import resources and parse game
+        run: godot --headless --path godot --editor --import --quit
+      - name: Run state contract checks
+        run: godot --headless --path godot --script res://tests/test_state.gd
+      - name: Boot main scene for 30 simulation frames
+        run: godot --headless --path godot --quit-after 30 --path godot
