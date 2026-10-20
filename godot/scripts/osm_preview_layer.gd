@@ -41,7 +41,7 @@ func load_tiles() -> bool:
 		return false
 	if not manifest.get("redistribution_allowed", false):
 		return false
-	var names: PackedStringArray = DirAccess.get_files_at(ROOT)
+	var names: PackedStringArray = DirAccess.get_files_at(world_root)
 	var imported: int = 0
 	for filename in names:
 		if not filename.ends_with(".json") or filename == "manifest.json":
