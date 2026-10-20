@@ -1,0 +1,88 @@
+name: Import Cesky Tesin real OSM road and building geometry
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/osm-cesky-tesin-import.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import-cz:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned geospatial dependencies
+        run: python -m pip install -r geodata/requirements.txt
+      - name: Verify parser tests
+        run: python -m unittest geodata.test_osm_extract geodata.test_geoetl -v
+      - name: Fetch real Czech OSM geometry in bounded area
+        run: |
+          python -m geodata.osm_extract \
+            --fetch \
+            --raw-xml /tmp/cesky_tesin_current.osm \
+            --geojson geodata/snapshots/cesky_tesin_center_osm_2026.geojson \
+            --bbox 18.6235 49.7440 18.6280 49.7483
+      - name: Convert to same metric origin as Polish bank
+        run: |
+          python -m geodata.geoetl \
+            --input geodata/snapshots/cesky_tesin_center_osm_2026.geojson \
+            --output-dir godot/data/world/cesky_tesin_center_osm_2026 \
+            --city-id CESKY_TESIN_CENTER \
+            --source-crs EPSG:4326 \
+            --anchor-lon 18.6332106 --anchor-lat 49.74816 \
+            --source-id OPENSTREETMAP_2026_CESKY_TESIN_CENTER \
+            --source-url 'https://api.openstreetmap.org/api/0.6/map?bbox=18.6235%2C49.7440%2C18.6280%2C49.7483' \
+            --license ODbL-1.0 --year 2026
+      - name: Validate actual non-fabricated Czech geometry and CRS
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          g=json.loads(Path('geodata/snapshots/cesky_tesin_center_osm_2026.geojson').read_text())
+          counts=g['metadata']['features']
+          m=json.loads(Path('godot/data/world/cesky_tesin_center_osm_2026/manifest.json').read_text())
+          assert counts['buildings']>=20, counts
+          assert counts['roads']>=8, counts
+          assert m['anchor_wgs84']=={'lon':18.6332106,'lat':49.74816}
+          assert m['historical_year']=='2026'
+          assert m['build_status']=='CURRENT_BASEMAP_NOT_HISTORICALLY_VERIFIED'
+          assert m['terrain_status']=='MISSING'
+          assert m['source']['license']=='ODbL-1.0'
+          assert m['source_features']==counts['buildings']+counts['roads']
+          print('CESKY TESIN ACTUAL DATA:',counts,'TILES:',m['tile_count'])
+          PY
+      - name: Add mandatory ODbL database attribution
+        run: |
+          cat > godot/data/world/cesky_tesin_center_osm_2026/ATTRIBUTION.txt <<'EOF'
+          © OpenStreetMap contributors. Open Database License (ODbL) 1.0.
+          https://www.openstreetmap.org/copyright
+          https://opendatacommons.org/licenses/odbl/1-0/
+          This Czech OSM extract and derived tiled database are offered under
+          ODbL 1.0 and require attribution and compliance with share-alike
+          database obligations. This is a current incomplete 2026 basemap,
+          NOT a reconstruction of historical 2023–2025 or 3D facades.
+          EOF
+      - name: Commit Czech geodata to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add geodata/snapshots/cesky_tesin_center_osm_2026.geojson godot/data/world/cesky_tesin_center_osm_2026/
+          if ! git diff --cached --quiet; then
+            git commit -m "data(world): import actual Czech Tesin center OSM outlines in shared 1to1 reference"
+            git push origin HEAD:main
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cesky-tesin-real-osm-2026-tiles
+          path: |
+            geodata/snapshots/cesky_tesin_center_osm_2026.geojson
+            godot/data/world/cesky_tesin_center_osm_2026/
+          retention-days: 14
+          if-no-files-found: error
