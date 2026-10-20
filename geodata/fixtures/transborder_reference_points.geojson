@@ -1,0 +1,52 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "purpose": "PUBLIC_COORDINATE_REFERENCE_POINTS_ONLY; NOT CITY BUILDINGS OR STREETS",
+    "crs": "EPSG:4326",
+    "reviewed_at": "2026-10-20",
+    "sources": [
+      {
+        "id": "MAPY_PL_CIESZYN",
+        "url": "https://mapy.com/pl/?id=94209443&source=osm",
+        "note": "Cieszyn town hall; public landmark coordinates, not a surveyed control point"
+      },
+      {
+        "id": "RUIAN_CZ_CITY_HALL",
+        "url": "https://regiony.kurzy.cz/cesky-tesin/namesti-csa/1-1/",
+        "note": "Czech city hall; address register coordinates, not field survey"
+      }
+    ]
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "CIESZYN_TOWN_HALL",
+      "properties": {
+        "kind": "landmark",
+        "name": "Ratusz, Rynek 1, Cieszyn"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.6332106,
+          49.74816
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "CESKY_TESIN_TOWN_HALL",
+      "properties": {
+        "kind": "landmark",
+        "name": "Radnice, náměstí ČSA 1/1, Český Těšín"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.62559852404365,
+          49.746341767306085
+        ]
+      }
+    }
+  ]
+}

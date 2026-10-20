@@ -1,0 +1,53 @@
+name: WORLD 1to1 geospatial ETL
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'geodata/**'
+      - '.github/workflows/geodata-tests.yml'
+  pull_request:
+    paths:
+      - 'geodata/**'
+      - '.github/workflows/geodata-tests.yml'
+permissions:
+  contents: read
+jobs:
+  geodata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: geodata/requirements.txt
+      - name: Install locked geospatial dependencies
+        run: python -m pip install -r geodata/requirements.txt
+      - name: Run metric geodata regression tests
+        run: python -m unittest geodata.test_geoetl -v
+      - name: Build real georeferenced reference-point tiles (no fabricated buildings)
+        run: |
+          python -m geodata.geoetl \
+            --input geodata/fixtures/transborder_reference_points.geojson \
+            --output-dir /tmp/world_reference_tiles \
+            --city-id CIESZYN_TRANSBORDER \
+            --source-crs EPSG:4326 \
+            --anchor-lon 18.6332106 --anchor-lat 49.7481600 \
+            --source-id LANDMARKS_VERIFIED_PUBLIC_COORDS \
+            --source-url 'https://mapy.com/pl/?id=94209443&source=osm' \
+            --license SOURCE_REVIEW_PENDING --internal-preview \
+            --year 2025
+      - name: Verify export tile count and no city-completion flags
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('/tmp/world_reference_tiles/manifest.json').read_text())
+          assert d['tile_count']==2
+          assert d['source_features']==2
+          assert not d['redistribution_allowed']
+          assert d['terrain_status']=='MISSING'
+          assert d['build_status']=='PREVIEW_ONLY_NOT_HISTORICALLY_VERIFIED'
+          print('WORLD GEODATA: metric point fixtures verified, no city completeness claim.')
+          PY
