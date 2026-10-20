@@ -1,0 +1,7 @@
+© OpenStreetMap contributors. Open Database License (ODbL) 1.0.
+https://www.openstreetmap.org/copyright
+https://opendatacommons.org/licenses/odbl/1-0/
+This Czech OSM extract and derived tiled database are offered under
+ODbL 1.0 and require attribution and compliance with share-alike
+database obligations. This is a current incomplete 2026 basemap,
+NOT a reconstruction of historical 2023–2025 or 3D facades.
