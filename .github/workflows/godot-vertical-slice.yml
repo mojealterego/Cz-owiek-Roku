@@ -29,4 +29,4 @@ jobs:
       - name: Run state contract checks
         run: godot --headless --path godot --script res://tests/test_state.gd
       - name: Boot main scene for 30 simulation frames
-        run: godot --headless --path godot --quit-after 30 --path godot
+        run: godot --headless --path godot --quit-after 30
