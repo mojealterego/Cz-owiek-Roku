@@ -58,6 +58,8 @@ jobs:
           find "$HOME/.local/share/godot/export_templates" -maxdepth 2 -type f -name 'android_debug.apk' -print
       - name: Import project
         run: godot --headless --path godot --editor --import --quit
+      - name: Confirm actual Godot project config before export
+        run: godot --headless --path godot --script res://tests/print_config.gd
       - name: Export debug APK ARM64
         run: godot --verbose --headless --path godot --export-debug Android godot/build/man-of-the-year-debug.apk
       - name: Verify APK archive
