@@ -1,0 +1,44 @@
+name: E2E production acceptance assessment
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'release/**'
+      - 'godot/**'
+      - 'data/world/**'
+      - '.github/workflows/e2e-release-acceptance.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  evidence-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify acceptance and anti-false-completion safeguards
+        run: python -m unittest release.test_e2e_gate -v
+      - name: Generate honest, machine-readable E2E status report
+        run: python -m release.e2e_gate --repo-root . --out /tmp/moty-e2e-status.json
+      - name: Check that unfinished delivery is not mislabeled production ready
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report=json.loads(Path('/tmp/moty-e2e-status.json').read_text())
+          assert report['schema_version']==1
+          assert report['chapter_count_required']==70
+          assert report['chapter_production_approved_count'] < 70
+          assert report['status']=='NOT_READY'
+          assert not report['ready_for_production']
+          print('E2E assessment valid: incomplete release correctly BLOCKED')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: moty-e2e-release-acceptance-status
+          path: /tmp/moty-e2e-status.json
+          if-no-files-found: error
+          retention-days: 30
