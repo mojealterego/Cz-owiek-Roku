@@ -42,3 +42,9 @@ jobs:
           if grep -q 'SCRIPT ERROR:' /tmp/moty-world.log; then exit 1; fi
       - name: Validate actual OSM geometry import and metric outlines
         run: godot --headless --path godot --script res://tests/test_osm_preview.gd
+      - name: Validate source-height terrain 3D meshing (synthetic QA only)
+        shell: bash
+        run: |
+          set -o pipefail
+          godot --headless --path godot --script res://tests/test_terrain_qa_layer.gd 2>&1 | tee /tmp/moty-terrain.log
+          if grep -q 'SCRIPT ERROR:' /tmp/moty-terrain.log; then exit 1; fi
