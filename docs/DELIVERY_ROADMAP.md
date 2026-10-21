@@ -23,6 +23,9 @@
 | WORLD.05 | Historyczne warianty i produkcyjny streaming Android | PARTIAL (CURRENT OSM ONLY); HISTORY & PERF PENDING | prototyp streamer zweryfikowany CI; wymagane LOD/FPS/RAM, dane 3D i historia |
 | WORLD.05a | Streamer bieżących sektorów OSM, indeks 256 m | GODOT CI VERIFIED, DEVICE UNTESTED | 13 sektorów indeksowanych, max 6/miasto, max 2 ładowania/klatkę/miasto, eviction; run 39586189163 |
 | WORLD.06 | Debugowy podgląd metrycznych 2 ratuszy i 13 kafli OSM PL/CZ na Android | BUILD VERIFIED; DEVICE UNTESTED | strict Godot runtime run 39525476547; APK run 39525476347 |
+| E2E.01 | Kontrakt testów CH01 PL/EN: menu, zapis, wybór, wznowienie | HEADLESS CI VERIFIED, DEVICE UNTESTED | run 39592458464 |
+| E2E.02 | Lokalna telemetria Godot: FPS/p95/statyczna pamięć/sektory | IMPLEMENTED, SYNTHETIC QA VERIFIED | telemetry tests run 39592458464; urządzenie nierozstrzygnięte |
+| E2E.03 | Bramka produkcyjna 70 rozdziałów i 12 kryteriów | EVIDENCE-GATE CI VERIFIED; STATUS NOT_READY | 1 greybox, 0/70 production-approved, 12 blocked; run 39593418298 |
 | G3 | Modele 3D, facial rig, animacje, tatuaże | NOT STARTED | zatwierdzone modele z wydajnością LOD |
 | G4 | 70 pełnych grywalnych rozdziałów | NOT STARTED | scenariusze, sceny, decyzje, aktorstwo, testy |
 | G5 | Galeria, 3 DLC, PL/EN, audio source-lock | NOT STARTED | pozytywne testy i zatwierdzenia mediów |
@@ -35,3 +38,6 @@
 
 ## Następny etap
 Priorytet: etap WORLD.02 — mapowanie scen książki na konkretne miejsca i daty, a następnie WORLD.03 — pozyskanie rzeczywistych warstw dróg, obrysów budynków, NMT i rekonstrukcji historycznych z GUGiK/ČÚZK. Działający ETL pozyskał dwa bieżące wycinki OSM (397 obrysów budynków, 145 dróg) i sprawdził znaczniki wysokości: 0 height w metrach, 225 budynków z liczbą kondygnacji. Powstał testowany importer oficjalnego CityGML LoD1 2024; rzeczywista paczka powiatowa GUGiK, LiDAR, NMT i historyczne warianty nadal nie zostały zaimportowane. Demo Godot renderuje obrysy bez zmyślonych kondygnacji. Równolegle: rzeczywisty test istniejącego APK na telefonie (instalacja, klatki, interfejs, zapis, zdjęcia i powrót do gry). Potem wymiana scenografii testowej na modele produkcyjne. Równolegle odseparować chronione zasoby, skorygować scenariusz na podstawie wersji książki zatwierdzonej do ekranizacji i ukończyć pipeline modeli.
+
+## Najnowszy dowód E2E
+`release/e2e_gate.py` generuje jawny raport produkcyjny. CI #39593418298 przeszedł i potwierdza brak gotowości: 12 blokad oraz brak 70 zaakceptowanych rozdziałów. Testy gry CH01 PL/EN: CI #39592458464 (sukces). Android debug eksport: CI #39592458307 (sukces). **Wszystkie trzy sukcesy to testy częściowej realizacji; nie jest to ukończenie produkcyjne, test telefonu ani pełne miasto 1:1.**

@@ -97,6 +97,17 @@ python -m unittest discover -s reference -p 'test_*.py' -v
 
 Dodatkowo: `godot --headless --path godot --editor --import --quit` oraz `godot --headless --path godot --script res://tests/test_state.gd`. Testy narracyjne nie zastępują rzeczywistego testu Android.
 
+## E2E acceptance — aktualny stan (2026-10-21)
+
+Uruchamiana automatycznie [bramka przyjęcia produktu](release/e2e_gate.py) tworzy raport JSON i wymaga dowodów dla: 70 zaakceptowanych produkcyjnych rozdziałów, historycznych miast 1:1, praw do tekstu i nagrań, modeli, lokalizacji PL/EN, trzech DLC, testów fizycznego Androida, stabilnego FPS/RAM i podpisu produkcyjnego APK. Istnienie 70 identyfikatorów w planie ani poprawne debug APK **nie oznaczają** zakończenia E2E.
+
+- [GitHub Actions — E2E acceptance gate (PASS, ale projekt NOT_READY)](https://github.com/mojealterego/Cz-owiek-Roku/actions/runs/39593418298): w raporcie `chapter_3d_greybox_count=1`, `chapter_production_approved_count=0`, `blocked_gate_count=12`, `status=NOT_READY`. Zielony CI oznacza tylko poprawność **oceny**, a nie gotowość do wydania.
+- [Godot PL/EN CH01 smoke E2E + telemetry regression](https://github.com/mojealterego/Cz-owiek-Roku/actions/runs/39592458464): CH01 menu → prolog → interakcja → wybór → save/continue. Wykrywanie uszkodzonego zapisu; pomiar FPS, p95, statycznej pamięci, aktywnych sektorów. **To test headless, nie symulacja fizycznego dotyku Android.**
+- [Android ARM64 debug APK z pomiarami w mapie](https://github.com/mojealterego/Cz-owiek-Roku/actions/runs/39592458307): zbudowany i zweryfikowany jako APK, bez fizycznych pomiarów FPS.
+- W menu mapy przyciski `FPS / RAM` i `ZAPISZ QA` uruchamiają diagnostykę bez sieci i zapisują `user://world_qa_metrics.json`. Dane należą do użytkownika i nie są automatycznie przesyłane.
+
+**Ukończenie projektu musi zostać potwierdzone niezależnie od raportu automatycznego.** Szczegóły kryteriów: [release/README.md](release/README.md).
+
 ## Najbliższy etap techniczny
 
 1. Zainstalować wyeksportowany debug APK na realnym urządzeniu ARM64 i zebrać logcat, FPS, frametime i temperaturę.
