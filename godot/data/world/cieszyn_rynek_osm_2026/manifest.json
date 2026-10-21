@@ -6,8 +6,11 @@
   "build_status": "CURRENT_BASEMAP_NOT_HISTORICALLY_VERIFIED",
   "buildings_height_status": "UNKNOWN",
   "city_id": "CIESZYN_RYNEK",
+  "explicit_osm_height_count": 0,
   "facades_historical_status": "NOT_VERIFIED",
+  "height_geometry_status": "PREVIEW_RELATIVE_TO_UNKNOWN_GROUND",
   "historical_year": "2026",
+  "levels_without_measured_height_count": 36,
   "proj_version": "3.7.2",
   "projection": "LOCAL_WGS84_AEQD",
   "redistribution_allowed": true,
@@ -15,7 +18,7 @@
   "source": {
     "id": "OPENSTREETMAP_2026_CIESZYN_RYNEK",
     "license": "ODbL-1.0",
-    "sha256": "016624e346a2e1a24eeb09cd5d6a7662028713852e3460812236b74cb0183ca1",
+    "sha256": "7d6a20c4620b376eb9a3fbe2851d790d228c06b861737e0daf7ed0c5eb1b5708",
     "url": "https://api.openstreetmap.org/api/0.6/map?bbox=18.6310%2C49.7468%2C18.6340%2C49.7492"
   },
   "source_crs": "EPSG:4326",

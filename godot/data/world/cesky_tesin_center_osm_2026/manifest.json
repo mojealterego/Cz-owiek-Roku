@@ -6,8 +6,11 @@
   "build_status": "CURRENT_BASEMAP_NOT_HISTORICALLY_VERIFIED",
   "buildings_height_status": "UNKNOWN",
   "city_id": "CESKY_TESIN_CENTER",
+  "explicit_osm_height_count": 0,
   "facades_historical_status": "NOT_VERIFIED",
+  "height_geometry_status": "PREVIEW_RELATIVE_TO_UNKNOWN_GROUND",
   "historical_year": "2026",
+  "levels_without_measured_height_count": 189,
   "proj_version": "3.7.2",
   "projection": "LOCAL_WGS84_AEQD",
   "redistribution_allowed": true,
@@ -15,7 +18,7 @@
   "source": {
     "id": "OPENSTREETMAP_2026_CESKY_TESIN_CENTER",
     "license": "ODbL-1.0",
-    "sha256": "e868622f80394c2fe5f21b8113c9847e1848b94fb59a7af864a5a0405cdbb9ad",
+    "sha256": "a93461eb2042e0c4b3cb6b31296709248ea8323ccfde14aa24082e5227e2bab3",
     "url": "https://api.openstreetmap.org/api/0.6/map?bbox=18.6235%2C49.7440%2C18.6280%2C49.7483"
   },
   "source_crs": "EPSG:4326",
