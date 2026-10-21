@@ -18,7 +18,7 @@ func _run() -> void:
     _check(not s.record_frame(-1.0, 2, 4, 4096), "Reject negative frame time")
     _check(not s.record_frame(0.016, -1, 4, 4096), "Reject impossible sector count")
     for i in range(250):
-        var delta: float = 0.04 if i >= 238 else 0.016
+        var delta: float = 0.04 if i >= 235 else 0.016
         s.record_frame(delta, (i % 6) + 1, (i % 9) + 1, 1024 * (i + 1))
     var report: Dictionary = s.snapshot()
     _check(report["sample_count"] == 250, "Cumulative frame count")
