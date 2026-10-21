@@ -1,0 +1,61 @@
+name: Inspect genuine GUGiK Cieszyn CityGML LoD1-2024 archive
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/gugik-cieszyn-inspect.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect-official-archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fetch official county ZIP with bounded transfer
+        shell: bash
+        run: |
+          curl --fail --location --retry 2 --connect-timeout 20 --max-time 150 \
+            --output /tmp/gugik-cieszyn-2403.zip \
+            'https://opendata.geoportal.gov.pl/InneDane/Budynki3D/LOD1/2024/24/2403.zip'
+          test -s /tmp/gugik-cieszyn-2403.zip
+          ls -lh /tmp/gugik-cieszyn-2403.zip
+          sha256sum /tmp/gugik-cieszyn-2403.zip
+      - name: Validate ZIP and inspect CityGML structure safely
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json,zipfile,hashlib,re
+          from pathlib import Path
+          path=Path('/tmp/gugik-cieszyn-2403.zip')
+          report={'source':'https://opendata.geoportal.gov.pl/InneDane/Budynki3D/LOD1/2024/24/2403.zip',
+                  'source_sha256':hashlib.sha256(path.read_bytes()).hexdigest(),
+                  'archive_bytes':path.stat().st_size,'members':[]}
+          with zipfile.ZipFile(path) as z:
+              members=z.infolist()
+              assert len(members) < 5000, 'excessive archive entries'
+              assert sum(f.file_size for f in members) < 1200000000, 'uncompressed archive too large'
+              assert z.testzip() is None, 'corrupt archive member'
+              for f in members:
+                  assert not f.filename.startswith('/') and '..' not in f.filename.split('/'), 'unsafe archive path'
+                  item={'path':f.filename,'uncompressed_bytes':f.file_size,'compressed_bytes':f.compress_size}
+                  if f.filename.lower().endswith(('.gml','.xml')):
+                      with z.open(f) as handle: head=handle.read(100000).decode('utf8','replace')
+                      item['header_sample']=head[:900]
+                      item['declared_srs']=list(dict.fromkeys(re.findall(r'srsName=["\']([^"\']+)',head)))[:5]
+                      item['building_tag_count_in_100kb']=head.count(':Building')
+                  report['members'].append(item)
+                  print('GUGIK MEMBER:',f.filename,'UNCOMPRESSED:',f.file_size,'SRS:',item.get('declared_srs'))
+          print('GUGIK_ZIP_REPORT_JSON',json.dumps(report,ensure_ascii=False))
+          Path('/tmp/gugik_cieszyn_inspection.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gugik-cieszyn-2403-citygml-inspection
+          path: /tmp/gugik_cieszyn_inspection.json
+          if-no-files-found: error
+          retention-days: 14
