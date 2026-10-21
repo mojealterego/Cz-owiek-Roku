@@ -19,7 +19,7 @@ def source_geotiff(root: Path, *, nodata: bool = False) -> Path:
     source = root / "SYNTHETIC_TEST_ONLY_NOT_ACTUAL_CIESZYN.tif"
     arr = np.full((130, 130), 307.5, dtype="float32")
     if nodata:
-        arr[0:10, 0:10] = -9999.0
+        arr[60:71, 60:71] = -9999.0
     with rasterio.open(source, "w", driver="GTiff", height=130, width=130,
                        count=1, dtype="float32", crs="EPSG:2180",
                        transform=from_origin(px - 650, py + 650, 10, 10),
