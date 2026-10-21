@@ -75,14 +75,32 @@ def fetch(destination: Path) -> dict:
         raise DMRFetchError("Expected unrendered GeoTIFF, not a picture or JSON error")
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_bytes(raw)
+    crs_repaired = False
     try:
         with rasterio.open(destination) as source:
             if source.driver != "GTiff" or source.count != 1 or source.crs is None:
                 raise DMRFetchError("Downloaded height raster lacks georeferencing")
-            if source.crs.to_epsg() != 5514:
-                raise DMRFetchError("Downloaded raster CRS differs from 5514: %s; EPSG=%s; WKT=%s" % (source.crs.to_string(), source.crs.to_epsg(), source.crs.to_wkt()[:500]))
             if source.width != WIDTH or source.height != HEIGHT:
                 raise DMRFetchError("Downloaded raster grid has unexpected dimensions")
+            if not (abs(source.res[0] - 2.0) < 0.1
+                    and abs(source.res[1] - 2.0) < 0.1):
+                raise DMRFetchError("Unexpected elevation raster spatial resolution")
+            west, south, east, north = BBOX
+            if not (abs(source.bounds.left - west) < 4
+                    and abs(source.bounds.right - east) < 4
+                    and abs(source.bounds.bottom - south) < 4
+                    and abs(source.bounds.top - north) < 4):
+                raise DMRFetchError("Downloaded raster location does not match requested bbox")
+            code = source.crs.to_epsg()
+            raw_wkt = source.crs.to_wkt()
+            if code != 5514:
+                expected_local = (
+                    raw_wkt.startswith('LOCAL_CS["S-JTSK / Krovak East North"')
+                    and 'AUTHORITY["EPSG","5514"]' in raw_wkt
+                )
+                if not expected_local:
+                    raise DMRFetchError("Unexpected downloaded CRS: " + raw_wkt[:350])
+                crs_repaired = True
             samples = source.read(1, masked=True)
             valid_count = int(samples.count())
             if valid_count < 50:
@@ -92,6 +110,16 @@ def fetch(destination: Path) -> dict:
             if not (math.isfinite(min_h) and math.isfinite(max_h)
                     and -1000.0 < min_h <= max_h < 4000.0):
                 raise DMRFetchError("Implausible terrain pixel range")
+        if crs_repaired:
+            # Official ArcGIS GeoTIFF writes a LOCAL_CS with the correct EPSG
+            # authority but incomplete PROJ definition. It has already passed
+            # service CRS, bounds, pixel size and raw WKT checks above.
+            # Re-tag the horizontal CRS only: NO coordinate/elevation edits.
+            with rasterio.open(destination, "r+") as editable:
+                editable.crs = rasterio.crs.CRS.from_epsg(5514)
+            with rasterio.open(destination) as verified:
+                if verified.crs.to_epsg() != 5514:
+                    raise DMRFetchError("Failed to normalize horizontal CRS")
     except Exception:
         destination.unlink(missing_ok=True)
         raise
@@ -100,6 +128,7 @@ def fetch(destination: Path) -> dict:
         "source_vertical_system": "CZ-BPV", "horizontal_crs": "EPSG:5514",
         "official_metadata_vertical_wkid": 8357,
         "raw_sha256": hashlib.sha256(raw).hexdigest(),
+        "horizontal_crs_retagged_after_validation": crs_repaired,
         "width": WIDTH, "height": HEIGHT,
         "valid_pixels": valid_count, "min_sample_m": round(min_h, 3),
         "max_sample_m": round(max_h, 3),
