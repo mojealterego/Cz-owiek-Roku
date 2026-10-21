@@ -40,6 +40,18 @@ jobs:
           set -o pipefail
           godot --headless --path godot --quit-after 40 --scene res://scenes/world_preview.tscn 2>&1 | tee /tmp/moty-world.log
           if grep -q 'SCRIPT ERROR:' /tmp/moty-world.log; then exit 1; fi
+      - name: Run CH01 PL/EN end-to-end save/choice/continue test
+        shell: bash
+        run: |
+          set -o pipefail
+          godot --headless --path godot --script res://tests/test_e2e_ch01.gd 2>&1 | tee /tmp/moty-ch01-e2e.log
+          if grep -q -e 'SCRIPT ERROR:' -e 'CH01 INTERACTIVE E2E FAILURES: [1-9]' /tmp/moty-ch01-e2e.log; then exit 1; fi
+      - name: Validate performance instrumentation calculations and local report
+        shell: bash
+        run: |
+          set -o pipefail
+          godot --headless --path godot --script res://tests/test_world_performance.gd 2>&1 | tee /tmp/moty-perf-model.log
+          if grep -q -e 'SCRIPT ERROR:' -e 'WORLD PERFORMANCE MODEL FAILURES: [1-9]' /tmp/moty-perf-model.log; then exit 1; fi
       - name: Validate actual OSM geometry import and metric outlines
         run: godot --headless --path godot --script res://tests/test_osm_preview.gd
       - name: Validate source-height terrain 3D meshing (synthetic QA only)

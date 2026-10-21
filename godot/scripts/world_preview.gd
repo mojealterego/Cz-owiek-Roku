@@ -16,6 +16,8 @@ var osm_layer: Node3D
 var cz_layer: Node3D
 var base_center: Vector3 = Vector3(-274.3, 0.0, 101.1)
 var show_osm: bool = true
+var show_performance: bool = false
+var telemetry = preload("res://scripts/world_performance.gd").new()
 
 func _ready() -> void:
 	var references: Dictionary = _read_references()
@@ -169,10 +171,12 @@ func _create_ui() -> void:
 	_add_button(places, "CIESZYN — RYNEK", _focus_rynek)
 	_add_button(places, "ČESKÝ TĚŠÍN", _focus_cesky)
 	_add_button(places, "OBA RATUSZE", _focus_both)
+	_add_button(places, "FPS / RAM", _toggle_performance)
 	var controls := HBoxContainer.new()
 	controls.alignment = BoxContainer.ALIGNMENT_CENTER
 	actions.add_child(controls)
 	_add_button(controls, "OSM: WŁ./WYŁ.", _toggle_osm)
+	_add_button(controls, "ZAPISZ QA", _save_performance)
 	_add_button(controls, "− / ODDAL", func() -> void: _zoom(1.25))
 	_add_button(controls, "+ / ZBLIŻ", func() -> void: _zoom(0.8))
 	_add_button(controls, "POWRÓT / BACK", func() -> void: get_tree().change_scene_to_file("res://scenes/main.tscn"))
@@ -198,7 +202,12 @@ func _refresh_camera() -> void:
 	if cz_layer != null:
 		cz_layer.set_focus(center)
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	if scene_valid and osm_layer != null and cz_layer != null:
+		var active: int = osm_layer.active_sector_count() + cz_layer.active_sector_count()
+		var meshes: int = osm_layer.active_mesh_count() + cz_layer.active_mesh_count()
+		var bytes: int = int(Performance.get_monitor(Performance.MEMORY_STATIC))
+		telemetry.record_frame(delta, active, meshes, bytes)
 	if Engine.get_process_frames() % 18 == 0:
 		_update_stream_stats()
 
@@ -211,6 +220,12 @@ func _update_stream_stats() -> void:
 	var first_line: String = distance_label.text.get_slice("\n", 0)
 	distance_label.text = first_line + "\nSektory w RAM: %d/%d | geometrie: %d | ODbL / dane 2026" % [
 		resident_count, available_count, total_meshes]
+	if show_performance:
+		var report: Dictionary = telemetry.snapshot()
+		distance_label.text += "\nFPS: %d | p95: %.1f ms | RAM statyczny: %.1f MB" % [
+			Engine.get_frames_per_second(),
+			float(report.get("window_p95_frame_ms", 0.0)),
+			float(report.get("peak_static_memory_bytes", 0)) / 1048576.0]
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventScreenDrag:
@@ -247,3 +262,13 @@ func _toggle_osm() -> void:
 		osm_layer.visible = show_osm
 	if cz_layer != null:
 		cz_layer.visible = show_osm
+
+func _toggle_performance() -> void:
+	show_performance = not show_performance
+	_update_stream_stats()
+
+func _save_performance() -> void:
+	if telemetry.save_report("user://world_qa_metrics.json"):
+		print("WORLD QA saved: user://world_qa_metrics.json (LOCAL, not a production FPS certification)")
+	else:
+		push_warning("WORLD QA needs at least 10 frames; no report saved.")
