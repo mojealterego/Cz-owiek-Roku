@@ -16,3 +16,9 @@ Potwierdzić licencję i warunki tworzenia pochodnego zbioru, doprowadzić polsk
 
 ## QA z 21 października 2026
 Próbne pobranie usługi ImageServer zakończyło się sukcesem. Format GeoTIFF źródła zawierał niepełną definicję `LOCAL_CS` z autorytetem EPSG:5514; po potwierdzeniu CRS, geograficznych granic i rozdzielczości zakodowano pełne odniesienie poziome EPSG:5514 bez modyfikowania współrzędnych ani wartości wysokości. Wykryto również zerowe próbki w źródle, które w tym obszarze nie mogą być bez weryfikacji uznane za powierzchnię terenu. Tryb `--zero-is-unverified-nodata` oznacza je jako brak danych **tylko w sektorach QA**, zachowując oryginalny plik niezmieniony. Weryfikacja historyczna, prawna oraz pionowe zestrojenie z budynkami nadal pozostają otwarte.
+
+## Wynik testu produkcyjnego QA — 21.10.2026
+- Run: https://github.com/mojealterego/Cz-owiek-Roku/actions/runs/39570793520 (success).
+- Źródłowy raster: 450 × 450 pikseli Float32, Bpv, układ poziomy 5514; 26 561 wartości zero w pełnym wycinku wymagających ostrożnego traktowania jako potencjalny brak danych.
+- Wybrane cztery sektory 256 × 256 m: 324 próbek rzeczywistych, zero braków po zastosowaniu maski kontrolnej. **Nie oznacza to kompletnego pokrycia miasta.**
+- Dokładności pionowej oraz zgodności z polskim datum nie przyjęto jako zweryfikowanej. Zabezpieczono wynik przed automatycznym eksportem publicznym.

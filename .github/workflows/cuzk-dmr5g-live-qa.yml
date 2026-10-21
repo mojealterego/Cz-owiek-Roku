@@ -51,6 +51,20 @@ jobs:
           assert m['rights_review_status']=='REVIEW_PENDING_INTERNAL_ONLY'
           assert m['zero_value_policy']=='MASKED_AS_UNVERIFIED_VOID_FOR_THIS_AREA'
           assert m['vertical_registration_to_game']=='NOT_VERIFIED'
-          print('REAL CUZK SOURCE TECHNICALLY VERIFIED, NO PUBLIC RASTER ARTIFACT')
+          from math import isfinite
+          p=Path('/tmp/cuzk_dmr5g_unpublished_world_tiles')
+          cells=[]
+          for tile in p.glob('E*.json'):
+            cells.extend(h for h in json.loads(tile.read_text())['heights_m'] if h is not None)
+          assert len(cells)==m['valid_sample_count']
+          assert all(isfinite(h) and 100<h<1000 for h in cells), 'Terrain values outside safe Czech Cieszyn QA bounds'
+          assert max(cells)-min(cells)>0.5, 'Flat constant raster is not a valid terrain model'
+          a=json.loads((p/'E-000003_N-000001.json').read_text())
+          b=json.loads((p/'E-000002_N-000001.json').read_text())
+          n=a['grid_width']
+          assert n==b['grid_width']
+          for y in range(n):
+            assert a['heights_m'][y*n+(n-1)]==b['heights_m'][y*n], 'Seam height discontinuity'
+          print('REAL CUZK SOURCE TECHNICALLY VERIFIED, QA HEIGHT RANGE',round(min(cells),2),round(max(cells),2),'NO PUBLIC RASTER ARTIFACT')
           PY
       # Deliberately no upload-artifact, git add, cache or publication of raw raster/tiles.
