@@ -1,0 +1,55 @@
+name: Czech official DMR5G terrain live QA - no public raster distribution
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'geodata/cuzk_dmr5g_fetch.py'
+      - 'geodata/test_cuzk_dmr5g_fetch.py'
+      - '.github/workflows/cuzk-dmr5g-live-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-terrain-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install geo and raster libraries
+        run: |
+          python -m pip install -r geodata/requirements.txt
+          python -m pip install rasterio==1.4.3 numpy==2.2.6
+      - name: Unit-test strict official CRS and format validation
+        run: python -m unittest geodata.test_cuzk_dmr5g_fetch -v
+      - name: Download real DMR5G excerpt privately on runner
+        run: python -m geodata.cuzk_dmr5g_fetch --output /tmp/cuzk_dmr5g_internal.tif
+      - name: Generate test-only 256-metre world terrain tiles
+        run: |
+          python -m geodata.terrain_geotiff \
+            --input /tmp/cuzk_dmr5g_internal.tif \
+            --output-dir /tmp/cuzk_dmr5g_unpublished_world_tiles \
+            --city-id CESKY_TESIN_CENTER \
+            --source-id CUZK_DMR5G_IMAGESERVER \
+            --source-url 'https://ags.cuzk.gov.cz/arcgis2/rest/services/dmr5g/ImageServer' \
+            --license-id CUZK_RIGHTS_REVIEW_REQUIRED \
+            --vertical-datum CZ-BPV --source-epoch 2013 \
+            --west -3 --east -2 --south -2 --north -1 \
+            --spacing-m 32 --internal-preview
+      - name: Verify real geographic raster was processed without distribution
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m=json.loads(Path('/tmp/cuzk_dmr5g_unpublished_world_tiles/manifest.json').read_text())
+          assert m['source_crs']=='EPSG:5514'
+          assert m['vertical_datum']=='CZ-BPV'
+          assert m['valid_sample_count'] > 10
+          assert m['tile_count']==4
+          assert m['rights_review_status']=='REVIEW_PENDING_INTERNAL_ONLY'
+          assert m['vertical_registration_to_game']=='NOT_VERIFIED'
+          print('REAL CUZK SOURCE TECHNICALLY VERIFIED, NO PUBLIC RASTER ARTIFACT')
+          PY
+      # Deliberately no upload-artifact, git add, cache or publication of raw raster/tiles.
