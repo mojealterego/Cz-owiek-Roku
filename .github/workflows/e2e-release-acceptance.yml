@@ -31,10 +31,12 @@ jobs:
           report=json.loads(Path('/tmp/moty-e2e-status.json').read_text())
           assert report['schema_version']==1
           assert report['chapter_count_required']==70
-          assert report['chapter_production_approved_count'] < 70
-          assert report['status']=='NOT_READY'
-          assert not report['ready_for_production']
-          print('E2E assessment valid: incomplete release correctly BLOCKED')
+          assert 0 <= report['chapter_production_approved_count'] <= 70
+          assert report['blocked_gate_count'] == len(report['blocked_gates'])
+          assert report['ready_for_production'] == (report['blocked_gate_count'] == 0)
+          expected = 'READY_FOR_HUMAN_RELEASE_REVIEW' if report['ready_for_production'] else 'NOT_READY'
+          assert report['status'] == expected
+          print('E2E acceptance evidence checked:', report['status'], 'blocked=', report['blocked_gates'])
           PY
       - uses: actions/upload-artifact@v4
         with:
