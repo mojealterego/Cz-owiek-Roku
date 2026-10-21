@@ -80,8 +80,9 @@ def export_geotiff(
         raise TerrainError("Explicit vertical datum required, e.g. PL-EVRF2007-NH or CZ-BPV")
     if vertical_datum.startswith("TEST_") and not internal_preview:
         raise TerrainError("Synthetic test datum cannot be used for release")
-    if not isinstance(source_epoch, str) or not re.fullmatch(r"20[0-9]{2}", source_epoch):
-        raise TerrainError("Source reference epoch YYYY required")
+    if not isinstance(source_epoch, str) or (source_epoch != "UNKNOWN" and
+            not re.fullmatch(r"20[0-9]{2}", source_epoch)):
+        raise TerrainError("Source reference epoch YYYY or explicit UNKNOWN required")
     if not rights_approved and not internal_preview:
         raise TerrainError("Source rights must be approved or export limited to internal preview")
     if not isinstance(spacing_m, int) or spacing_m not in SPACING_M:

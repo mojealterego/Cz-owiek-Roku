@@ -1,0 +1,58 @@
+name: Polish GUGiK real NMT WCS QA - source-only
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'geodata/gugik_nmt_live.py'
+      - 'geodata/test_gugik_nmt_live.py'
+      - '.github/workflows/gugik-nmt-live-qa.yml'
+      - 'geodata/terrain_geotiff.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  polish-nmt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned geospatial and raster stack
+        run: |
+          python -m pip install -r geodata/requirements.txt
+          python -m pip install rasterio==1.4.3 numpy==2.2.6
+      - name: Run offline WCS validation
+        run: python -m unittest geodata.test_gugik_wcs_probe geodata.test_gugik_nmt_live -v
+      - name: Inspect official coverage envelope and axis names
+        run: python -m geodata.gugik_nmt_live --mode describe
+      - name: Fetch strictly bounded real Polish terrain
+        run: python -m geodata.gugik_nmt_live --mode download --out /tmp/pl_cieszyn_nmt_internal.tif
+      - name: Convert real Polish terrain to private metric QA tiles
+        run: |
+          python -m geodata.terrain_geotiff \
+            --input /tmp/pl_cieszyn_nmt_internal.tif \
+            --output-dir /tmp/pl_cieszyn_nmt_qa_tiles \
+            --city-id CIESZYN_RYNEK --source-id GUGIK_WCS_NMT_GRID1 \
+            --source-url 'https://mapy.geoportal.gov.pl/wss/service/PZGIK/NMT/GRID1/WCS/DigitalTerrainModelFormatTIFF' \
+            --license-id GUGIK_OPEN_ACCESS_NEEDS_PROVENANCE \
+            --vertical-datum PL-KRON86-NH --source-epoch UNKNOWN \
+            --west -1 --east 0 --south -1 --north 0 \
+            --spacing-m 32 --internal-preview
+      - name: Validate Polish QA result is not silently aligned to Czech Bpv
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          base=Path('/tmp/pl_cieszyn_nmt_qa_tiles')
+          m=json.loads((base/'manifest.json').read_text())
+          assert m['source_crs']=='EPSG:2180'
+          assert m['vertical_datum']=='PL-KRON86-NH'
+          assert m['vertical_registration_to_game']=='NOT_VERIFIED'
+          assert m['rights_review_status']=='REVIEW_PENDING_INTERNAL_ONLY'
+          assert m['tile_count']==4
+          assert m['valid_sample_count']>100
+          print('PL NMT QA',m['valid_sample_count'],'VALID HEIGHT SAMPLES; NO PUBLIC TERRAIN DATA')
+          PY
+      # No artifact upload, no commits, no public sharing of raster or derived tiles.
