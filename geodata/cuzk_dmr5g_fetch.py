@@ -80,7 +80,7 @@ def fetch(destination: Path) -> dict:
             if source.driver != "GTiff" or source.count != 1 or source.crs is None:
                 raise DMRFetchError("Downloaded height raster lacks georeferencing")
             if source.crs.to_epsg() != 5514:
-                raise DMRFetchError("Downloaded raster CRS differs from 5514")
+                raise DMRFetchError("Downloaded raster CRS differs from 5514: %s; EPSG=%s; WKT=%s" % (source.crs.to_string(), source.crs.to_epsg(), source.crs.to_wkt()[:500]))
             if source.width != WIDTH or source.height != HEIGHT:
                 raise DMRFetchError("Downloaded raster grid has unexpected dimensions")
             samples = source.read(1, masked=True)
