@@ -40,7 +40,7 @@ def parse_height(data: bytes) -> float:
         raise PolishPointError("Not a plain numeric terrain-height response: " + repr(text[:60]))
     v = float(text.replace(",", "."))
     if not math.isfinite(v) or not (100.0 < v < 1000.0):
-        raise PolishPointError("Implausible or missing Cieszyn height")
+        raise PolishPointError("Implausible or missing Cieszyn height: " + str(v))
     return v
 
 
