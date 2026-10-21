@@ -1,0 +1,102 @@
+name: WORLD 1to1 verified OSM height tag refresh
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/osm-height-refresh.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  source-height-refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install geodata dependencies
+        run: python -m pip install -r geodata/requirements.txt
+      - name: Validate parsing and provenance
+        run: python -m unittest geodata.test_osm_extract geodata.test_height_enrich geodata.test_geoetl -v
+      - name: Fetch and parse both bounded live current OSM geometry snapshots
+        shell: bash
+        run: |
+          mkdir -p /tmp/osm_height_refresh
+          python -m geodata.osm_extract --fetch --raw-xml /tmp/osm_height_refresh/pl.osm \
+            --geojson /tmp/osm_height_refresh/pl.geojson --bbox 18.6310 49.7468 18.6340 49.7492
+          python -m geodata.osm_extract --fetch --raw-xml /tmp/osm_height_refresh/cz.osm \
+            --geojson /tmp/osm_height_refresh/cz.geojson --bbox 18.6235 49.7440 18.6280 49.7483
+      - name: Reconcile height tags with frozen 2D geodata and assert no geometric drift
+        shell: bash
+        run: |
+          python -m geodata.enrich_height_tags \
+            --source geodata/snapshots/cieszyn_rynek_osm_2026.geojson \
+            --refreshed /tmp/osm_height_refresh/pl.geojson \
+            --output /tmp/osm_height_refresh/pl_enriched.geojson
+          python -m geodata.enrich_height_tags \
+            --source geodata/snapshots/cesky_tesin_center_osm_2026.geojson \
+            --refreshed /tmp/osm_height_refresh/cz.geojson \
+            --output /tmp/osm_height_refresh/cz_enriched.geojson
+      - name: Build updated PL and CZ metric tile datasets without synthetic heights
+        shell: bash
+        run: |
+          python -m geodata.geoetl \
+            --input /tmp/osm_height_refresh/pl_enriched.geojson \
+            --output-dir /tmp/osm_height_refresh/pl_tiles \
+            --city-id CIESZYN_RYNEK --source-crs EPSG:4326 \
+            --anchor-lon 18.6332106 --anchor-lat 49.74816 \
+            --source-id OPENSTREETMAP_2026_CIESZYN_RYNEK \
+            --source-url 'https://api.openstreetmap.org/api/0.6/map?bbox=18.6310%2C49.7468%2C18.6340%2C49.7492' \
+            --license ODbL-1.0 --year 2026
+          python -m geodata.geoetl \
+            --input /tmp/osm_height_refresh/cz_enriched.geojson \
+            --output-dir /tmp/osm_height_refresh/cz_tiles \
+            --city-id CESKY_TESIN_CENTER --source-crs EPSG:4326 \
+            --anchor-lon 18.6332106 --anchor-lat 49.74816 \
+            --source-id OPENSTREETMAP_2026_CESKY_TESIN_CENTER \
+            --source-url 'https://api.openstreetmap.org/api/0.6/map?bbox=18.6235%2C49.7440%2C18.6280%2C49.7483' \
+            --license ODbL-1.0 --year 2026
+      - name: Replace only known OSM JSON snapshots and metric tile files
+        shell: bash
+        run: |
+          cp /tmp/osm_height_refresh/pl_enriched.geojson geodata/snapshots/cieszyn_rynek_osm_2026.geojson
+          cp /tmp/osm_height_refresh/cz_enriched.geojson geodata/snapshots/cesky_tesin_center_osm_2026.geojson
+          rm godot/data/world/cieszyn_rynek_osm_2026/*.json
+          rm godot/data/world/cesky_tesin_center_osm_2026/*.json
+          cp /tmp/osm_height_refresh/pl_tiles/*.json godot/data/world/cieszyn_rynek_osm_2026/
+          cp /tmp/osm_height_refresh/cz_tiles/*.json godot/data/world/cesky_tesin_center_osm_2026/
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for slug, buildings in [("cieszyn_rynek", 117), ("cesky_tesin_center", 280)]:
+              file=Path(f"godot/data/world/{slug}_osm_2026/manifest.json")
+              value=json.loads(file.read_text())
+              tagged=value["explicit_osm_height_count"]
+              floors=value["levels_without_measured_height_count"]
+              assert 0 <= tagged <= buildings
+              assert 0 <= floors <= buildings-tagged
+              assert value["terrain_status"] == "MISSING"
+              assert value["height_geometry_status"] == "PREVIEW_RELATIVE_TO_UNKNOWN_GROUND"
+              print(f"{slug}: source heights = {tagged}, levels-only = {floors}, buildings total = {buildings}")
+          PY
+      - name: Commit provenance-preserving real tag refresh
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add geodata/snapshots/ godot/data/world/cieszyn_rynek_osm_2026/ godot/data/world/cesky_tesin_center_osm_2026/
+          if ! git diff --cached --quiet; then
+            git commit -m 'data(world): add source-derived OSM height tags to existing PL/CZ basemap'
+            git push origin HEAD:main
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: man-of-the-year-osm-height-coverage
+          path: |
+            godot/data/world/cieszyn_rynek_osm_2026/manifest.json
+            godot/data/world/cesky_tesin_center_osm_2026/manifest.json
+          retention-days: 14

@@ -1,12 +1,5 @@
 name: Import public OSM building and road geometry
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'geodata/osm_extract.py'
-      - 'geodata/test_osm_extract.py'
-      - 'geodata/fixtures/osm_three_real_buildings.xml'
-      - '.github/workflows/osm-city-import.yml'
   workflow_dispatch:
 permissions:
   contents: write
