@@ -9,6 +9,7 @@ var expected_city_id: String = "CIESZYN_RYNEK"
 var expected_source_id: String = "OPENSTREETMAP_2026_CIESZYN_RYNEK"
 
 var loaded: bool = false
+var auto_load: bool = true
 var building_ids: Dictionary = {}
 var road_ids: Dictionary = {}
 var sourced_height_ids: Dictionary = {}
@@ -18,6 +19,8 @@ var tile_count: int = 0
 var world_meshes: Array[MeshInstance3D] = []
 
 func _ready() -> void:
+	if not auto_load:
+		return
 	loaded = load_tiles()
 	if not loaded:
 		push_warning("OSM geometry unavailable or invalid. Showing two control points only.")

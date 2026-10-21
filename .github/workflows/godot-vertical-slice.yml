@@ -48,3 +48,9 @@ jobs:
           set -o pipefail
           godot --headless --path godot --script res://tests/test_terrain_qa_layer.gd 2>&1 | tee /tmp/moty-terrain.log
           if grep -q 'SCRIPT ERROR:' /tmp/moty-terrain.log; then exit 1; fi
+      - name: Verify real PL/CZ OSM mobile sector streaming and eviction
+        shell: bash
+        run: |
+          set -o pipefail
+          godot --headless --path godot --script res://tests/test_osm_streamer.gd 2>&1 | tee /tmp/moty-streamer.log
+          if grep -q -e 'SCRIPT ERROR:' -e 'OSM STREAMING QA FAILURES: [1-9]' /tmp/moty-streamer.log; then exit 1; fi

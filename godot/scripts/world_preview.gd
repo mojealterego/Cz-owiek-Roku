@@ -22,7 +22,7 @@ func _ready() -> void:
 	_setup_world()
 	_create_grid()
 	_create_ui()
-	osm_layer = preload("res://scripts/osm_preview_layer.gd").new()
+	osm_layer = preload("res://scripts/osm_tile_streamer.gd").new()
 	add_child(osm_layer)
 	cz_layer = preload("res://scripts/osm_preview_layer.gd").new()
 	cz_layer.world_root = "res://data/world/cesky_tesin_center_osm_2026"
@@ -39,10 +39,8 @@ func _ready() -> void:
 	var start: Vector3 = _position_from_record(p[0])
 	var destination: Vector3 = _position_from_record(p[1])
 	var d: float = start.distance_to(destination)
-	distance_label.text = "%.1f m między ratuszami | OSM 2026: %d budynków, %d dróg, 13 sektorów" % [
-		d, osm_layer.building_ids.size() + cz_layer.building_ids.size(),
-		osm_layer.road_ids.size() + cz_layer.road_ids.size()]
-	distance_label.text += "\nŹródłowe height=* (metry): %d | Kondygnacje nie są wysokością" % [osm_layer.sourced_height_ids.size() + cz_layer.sourced_height_ids.size()]
+	distance_label.text = "%.1f m między ratuszami | OSM 2026: 397 obrysów, 145 dróg" % d
+	_update_stream_stats()
 	scene_valid = true
 	_refresh_camera()
 
@@ -195,6 +193,24 @@ func _refresh_camera() -> void:
 		return
 	view_camera.position = center + Vector3(0.0, camera_height, camera_height * 0.43)
 	view_camera.look_at(center, Vector3.UP)
+	if osm_layer != null:
+		osm_layer.set_focus(center)
+	if cz_layer != null:
+		cz_layer.set_focus(center)
+
+func _process(_delta: float) -> void:
+	if Engine.get_process_frames() % 18 == 0:
+		_update_stream_stats()
+
+func _update_stream_stats() -> void:
+	if distance_label == null or osm_layer == null or cz_layer == null:
+		return
+	var resident_count: int = osm_layer.active_sector_count() + cz_layer.active_sector_count()
+	var available_count: int = osm_layer.source_tile_count + cz_layer.source_tile_count
+	var total_meshes: int = osm_layer.active_mesh_count() + cz_layer.active_mesh_count()
+	var first_line: String = distance_label.text.get_slice("\n", 0)
+	distance_label.text = first_line + "\nSektory w RAM: %d/%d | geometrie: %d | ODbL / dane 2026" % [
+		resident_count, available_count, total_meshes]
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventScreenDrag:
