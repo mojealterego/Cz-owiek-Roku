@@ -67,4 +67,21 @@ jobs:
             assert a['heights_m'][y*n+(n-1)]==b['heights_m'][y*n], 'Seam height discontinuity'
           print('REAL CUZK SOURCE TECHNICALLY VERIFIED, QA HEIGHT RANGE',round(min(cells),2),round(max(cells),2),'NO PUBLIC RASTER ARTIFACT')
           PY
+      - uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.5.2
+          use-dotnet: false
+          include-templates: false
+      - name: Import Godot project on internal CI worker
+        run: godot --headless --path godot --editor --import --quit
+      - name: Load REAL DMR5G data into private Godot terrain mesh and test datums
+        shell: bash
+        run: |
+          set -o pipefail
+          godot --headless --path godot --script res://tests/test_real_cuzk_terrain.gd -- \
+            --terrain-source=/tmp/cuzk_dmr5g_unpublished_world_tiles \
+            2>&1 | tee /tmp/real-cuzk-runtime-metadata.log
+          if grep -q -e 'SCRIPT ERROR:' -e 'REAL_CUZK_GODOT_QA FAILURES: [1-9]' /tmp/real-cuzk-runtime-metadata.log; then
+            exit 1
+          fi
       # Deliberately no upload-artifact, git add, cache or publication of raw raster/tiles.
