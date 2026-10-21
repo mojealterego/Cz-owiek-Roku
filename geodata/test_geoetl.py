@@ -120,6 +120,57 @@ class GeoETLTests(unittest.TestCase):
                     pieces.append(f)
             self.assertGreater(len(pieces), 2)
 
+    def test_exact_height_propagates_to_each_tile_without_guessing_floors(self):
+        original = json.loads(POINTS.read_text())
+        ring = [[18.63314, 49.74815], [18.63328, 49.74815], [18.63328, 49.74822],
+                [18.63314, 49.74822], [18.63314, 49.74815]]
+        original["features"] = [{
+            "type": "Feature", "id": "VERIFIED_GEOMETRY_TAG_TEST",
+            "properties": {"kind": "building", "name": "not a real sampled height",
+                           "height_m": 12.5, "height_source": "OSM_HEIGHT_TAG",
+                           "height_status": "OSM_REPORTED_UNVERIFIED",
+                           "building_levels": 4, "levels_status": "OSM_LEVEL_COUNT_ONLY_NOT_HEIGHT"},
+            "geometry": {"type": "Polygon", "coordinates": [ring]},
+        }]
+        with tempfile.TemporaryDirectory() as tmp:
+            inp = Path(tmp) / "input.geojson"
+            inp.write_text(json.dumps(original))
+            out = Path(tmp) / "tiles"
+            manifest = call_build(out, inp)
+            self.assertEqual(manifest["explicit_osm_height_count"], 1)
+            tiled = [json.loads(f.read_text()) for f in out.glob("E*.json")]
+            self.assertGreaterEqual(len(tiled), 1)
+            for tile in tiled:
+                for f in tile["features"]:
+                    self.assertEqual(f["height_m"], 12.5)
+                    self.assertEqual(f["height_source"], "OSM_HEIGHT_TAG")
+                    self.assertEqual(f["building_levels"], 4)
+                    self.assertEqual(f["elevation_status"], "UNKNOWN_NO_TERRAIN")
+
+    def test_rejects_height_without_source_and_synthesized_height(self):
+        for faulty in [
+            {"height_m": 9, "height_source": "FLOOR_COUNT_GUESS",
+             "height_status": "OSM_REPORTED_UNVERIFIED"},
+            {"height_m": 3, "height_source": "OSM_HEIGHT_TAG"},
+            {"height_m": float("nan"), "height_source": "OSM_HEIGHT_TAG",
+             "height_status": "OSM_REPORTED_UNVERIFIED"},
+            {"building_levels": 5, "levels_status": "OSM_LEVEL_COUNT_ONLY_NOT_HEIGHT",
+             "height_m": 15, "height_source": "LEVEL_COUNT_ESTIMATE",
+             "height_status": "OSM_REPORTED_UNVERIFIED"},
+        ]:
+            with tempfile.TemporaryDirectory() as tmp:
+                document = json.loads(POINTS.read_text())
+                feat = document["features"][0]
+                feat["properties"]["kind"] = "building"
+                feat["geometry"] = {"type": "Polygon", "coordinates": [
+                    [[18.6331, 49.7481], [18.6332, 49.7481],
+                     [18.6332, 49.7482], [18.6331, 49.7481]]]}
+                feat["properties"].update(faulty)
+                inp = Path(tmp) / "source.geojson"
+                inp.write_text(json.dumps({"type": "FeatureCollection", "features": [feat]}))
+                with self.assertRaises(GeoETLError):
+                    call_build(Path(tmp) / "out", inp)
+
     def test_source_preservation_and_refusal_to_overwrite(self):
         with tempfile.TemporaryDirectory() as tmp:
             out = Path(tmp) / "output"

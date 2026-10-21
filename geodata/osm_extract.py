@@ -11,6 +11,7 @@ import datetime as dt
 import hashlib
 import json
 import math
+import re
 from pathlib import Path
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
@@ -27,6 +28,31 @@ SKIP_ROADS = {"proposed", "construction", "abandoned", "razed"}
 
 class OSMImportError(ValueError):
     pass
+
+
+HEIGHT_RE = re.compile(r"^([0-9]+(?:\\.[0-9]+)?)(?:\\s+m)?$")
+LEVELS_RE = re.compile(r"^[0-9]{1,2}$")
+
+
+def parse_osm_height_metres(value: object) -> float | None:
+    """Accept only explicit OSM height metres. Never infer from building:levels."""
+    if not isinstance(value, str):
+        return None
+    match = HEIGHT_RE.fullmatch(value.strip())
+    if match is None:
+        return None
+    metres = float(match.group(1))
+    if not math.isfinite(metres) or metres < 0.5 or metres > 300:
+        return None
+    return metres
+
+
+def parse_building_levels(value: object) -> int | None:
+    """Store floor count as metadata only, never convert it into metres."""
+    if not isinstance(value, str) or not LEVELS_RE.fullmatch(value.strip()):
+        return None
+    levels = int(value.strip())
+    return levels if 1 <= levels <= 99 else None
 
 
 def validate_bbox(bbox: tuple[float, float, float, float]) -> None:
@@ -92,6 +118,8 @@ def extract(source_file: Path, target_file: Path, *, bbox: tuple[float, float, f
     skipped = {"missing_node": 0, "invalid_polygon": 0, "unclosed_building": 0,
                "non_target": 0, "unsupported_highway": 0}
     counts = {"buildings": 0, "roads": 0}
+    height_coverage = {"explicit_height": 0, "levels_only": 0,
+                       "unknown_height": 0, "invalid_height_tags": 0}
     for item in ways:
         tags = {e.get("k"): e.get("v") for e in item if e.tag == "tag"}
         building = tags.get("building") not in (None, "no", "demolished")
@@ -125,10 +153,29 @@ def extract(source_file: Path, target_file: Path, *, bbox: tuple[float, float, f
         name = tags.get("name", "")
         if not isinstance(name, str) or len(name) > 160:
             name = name[:160] if isinstance(name, str) else ""
+        properties = {"kind": kind, "name": name}
+        if building:
+            actual_height = parse_osm_height_metres(tags.get("height"))
+            building_levels = parse_building_levels(tags.get("building:levels"))
+            if actual_height is not None:
+                properties["height_m"] = actual_height
+                properties["height_source"] = "OSM_HEIGHT_TAG"
+                properties["height_status"] = "OSM_REPORTED_UNVERIFIED"
+                height_coverage["explicit_height"] += 1
+            elif tags.get("height") is not None:
+                height_coverage["invalid_height_tags"] += 1
+            if building_levels is not None:
+                properties["building_levels"] = building_levels
+                properties["levels_status"] = "OSM_LEVEL_COUNT_ONLY_NOT_HEIGHT"
+            if actual_height is None:
+                if building_levels is not None:
+                    height_coverage["levels_only"] += 1
+                else:
+                    height_coverage["unknown_height"] += 1
         features.append({
             "type": "Feature",
             "id": "OSM_W" + uid,
-            "properties": {"kind": kind, "name": name},
+            "properties": properties,
             "geometry": geometry,
         })
         counts["buildings" if building else "roads"] += 1
@@ -147,6 +194,7 @@ def extract(source_file: Path, target_file: Path, *, bbox: tuple[float, float, f
         "historic_state": "CURRENT_DATA_NOT_VERIFIED_FOR_2023_2025",
         "node_count": len(nodes), "way_count": len(ways),
         "features": counts, "skipped": skipped,
+        "height_tag_coverage": height_coverage,
         "relation_multipolygon_support": "NOT_IMPLEMENTED",
     }
     output = {"type": "FeatureCollection", "features": sorted(features, key=lambda f: f["id"]),

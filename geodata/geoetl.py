@@ -88,7 +88,32 @@ def _sanitize_feature(feature: dict[str, Any]) -> tuple[str, str, str, Any]:
     )
     if geometry.geom_type not in expected:
         raise GeoETLError(f"Kind and geometry disagree: {identity}")
-    return identity, kind, name, geometry
+    attributes: dict[str, Any] = {}
+    if kind == "building":
+        explicit_height = properties.get("height_m")
+        height_source = properties.get("height_source")
+        height_status = properties.get("height_status")
+        if explicit_height is not None:
+            if (not isinstance(explicit_height, (int, float))
+                    or isinstance(explicit_height, bool)
+                    or not math.isfinite(explicit_height)
+                    or not (0.5 <= float(explicit_height) <= 300.0)
+                    or height_source != "OSM_HEIGHT_TAG"
+                    or height_status != "OSM_REPORTED_UNVERIFIED"):
+                raise GeoETLError(f"Unverified or invalid building height: {identity}")
+            attributes["height_m"] = float(explicit_height)
+            attributes["height_source"] = height_source
+            attributes["height_status"] = height_status
+        elif height_source is not None or height_status is not None:
+            raise GeoETLError(f"Orphaned height provenance: {identity}")
+        floors = properties.get("building_levels")
+        if floors is not None:
+            if (type(floors) is not int or not (1 <= floors <= 99)
+                    or properties.get("levels_status") != "OSM_LEVEL_COUNT_ONLY_NOT_HEIGHT"):
+                raise GeoETLError(f"Invalid floor count or provenance: {identity}")
+            attributes["building_levels"] = floors
+            attributes["levels_status"] = "OSM_LEVEL_COUNT_ONLY_NOT_HEIGHT"
+    return identity, kind, name, geometry, attributes
 
 
 def _coordinate_pairs(geometry: Any) -> Any:
@@ -97,7 +122,7 @@ def _coordinate_pairs(geometry: Any) -> Any:
 
 
 def _clip_projected_geometry(
-    feature_id: str, kind: str, name: str, geom: Any
+    feature_id: str, kind: str, name: str, geom: Any, attributes: dict[str, Any]
 ) -> list[tuple[tuple[int, int], dict[str, Any]]]:
     min_e, min_n, max_e, max_n = geom.bounds
     if not all(math.isfinite(v) for v in (min_e, min_n, max_e, max_n)):
@@ -135,6 +160,7 @@ def _clip_projected_geometry(
                 "geometry_type": local.geom_type,
                 "coordinates": _coordinate_pairs(local),
                 "elevation_status": "UNKNOWN_NO_TERRAIN",
+                **attributes,
             }))
     return result
 
@@ -181,15 +207,21 @@ def build(
     t = metric_transformer(source_crs, anchor_lon, anchor_lat)
     tiles: dict[tuple[int, int], list[dict[str, Any]]] = defaultdict(list)
     seen: set[str] = set()
+    height_sourced_ids: set[str] = set()
+    levels_only_ids: set[str] = set()
     for f in features:
-        uid, kind, name, g = _sanitize_feature(f)
+        uid, kind, name, g, attributes = _sanitize_feature(f)
         if uid in seen:
             raise GeoETLError(f"Duplicate feature ID: {uid}")
         seen.add(uid)
+        if "height_m" in attributes:
+            height_sourced_ids.add(uid)
+        elif "building_levels" in attributes:
+            levels_only_ids.add(uid)
         geo = transform(t.transform, g)
         if not geo.is_valid:
             raise GeoETLError(f"Invalid geometry after projection: {uid}")
-        for tile, piece in _clip_projected_geometry(uid, kind, name, geo):
+        for tile, piece in _clip_projected_geometry(uid, kind, name, geo, attributes):
             tiles[tile].append(piece)
     summary = {
         "schema_version": 1, "type": "WORLD_METRIC_TILES",
@@ -207,6 +239,9 @@ def build(
         "buildings_height_status": "UNKNOWN",
         "terrain_status": "MISSING",
         "facades_historical_status": "NOT_VERIFIED",
+        "explicit_osm_height_count": len(height_sourced_ids),
+        "levels_without_measured_height_count": len(levels_only_ids),
+        "height_geometry_status": "PREVIEW_RELATIVE_TO_UNKNOWN_GROUND",
     }
     # All validation completes before any filesystem mutation.
     output_dir.mkdir(parents=True, exist_ok=True)
