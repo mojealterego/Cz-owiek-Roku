@@ -99,14 +99,23 @@ def coverage_url(axis_labels: list[str]) -> str:
     if len(set(axis_labels)) != 2:
         raise PolishNMTError("Duplicated axes")
     west, south, east, north = BBOX
-    x, y = axis_labels
-    if x not in ("x", "X", "E", "e", "Easting", "easting", "X") or y not in (
-            "y", "Y", "N", "n", "Northing", "northing"):
-        raise PolishNMTError("Unrecognized coverage axis order; manual review required")
+    def axis_range(label: str) -> str:
+        if label in ("x", "X", "E", "e", "Easting", "easting"):
+            return f"{label}({west},{east})"
+        if label in ("y", "Y", "N", "n", "Northing", "northing"):
+            return f"{label}({south},{north})"
+        raise PolishNMTError("Unrecognized coverage axis: " + label)
+    subsets = [axis_range(label) for label in axis_labels]
+    if not any(s.startswith(("x(", "X(", "E(", "e(", "Easting(", "easting("))
+               for s in subsets):
+        raise PolishNMTError("Missing easting axis")
+    if not any(s.startswith(("y(", "Y(", "N(", "n(", "Northing(", "northing("))
+               for s in subsets):
+        raise PolishNMTError("Missing northing axis")
     return query("GetCoverage", {
         "COVERAGEID": COVERAGE_ID,
         "FORMAT": "image/tiff",
-        "SUBSET": [f"{x}({west},{east})", f"{y}({south},{north})"],
+        "SUBSET": subsets,
     })
 
 

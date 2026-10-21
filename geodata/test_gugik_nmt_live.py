@@ -30,6 +30,12 @@ class WCSNMTTests(unittest.TestCase):
         self.assertEqual(q["SUBSET"], [f"x({BBOX[0]},{BBOX[2]})",
                                        f"y({BBOX[1]},{BBOX[3]})"])
 
+    def test_server_declared_reverse_yx_order_keeps_coordinate_semantics(self):
+        from urllib.parse import parse_qs, urlparse
+        q = parse_qs(urlparse(coverage_url(["y", "x"])).query)
+        self.assertEqual(q["SUBSET"], [f"y({BBOX[1]},{BBOX[3]})",
+                                       f"x({BBOX[0]},{BBOX[2]})"])
+
     def test_rejects_unknown_axis_order_or_crs(self):
         with self.assertRaises(PolishNMTError):
             coverage_url(["latitude","longitude"])
