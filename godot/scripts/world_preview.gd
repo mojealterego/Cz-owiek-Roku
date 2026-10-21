@@ -42,6 +42,7 @@ func _ready() -> void:
 	distance_label.text = "%.1f m między ratuszami | OSM 2026: %d budynków, %d dróg, 13 sektorów" % [
 		d, osm_layer.building_ids.size() + cz_layer.building_ids.size(),
 		osm_layer.road_ids.size() + cz_layer.road_ids.size()]
+	distance_label.text += "\\nŹródłowe height=* (metry): %d | Kondygnacje nie są wysokością" % [osm_layer.sourced_height_ids.size() + cz_layer.sourced_height_ids.size()]
 	scene_valid = true
 	_refresh_camera()
 
@@ -152,7 +153,7 @@ func _create_ui() -> void:
 	distance_label = Label.new()
 	distance_label.anchor_right = 1.0
 	distance_label.offset_top = 64
-	distance_label.offset_bottom = 112
+	distance_label.offset_bottom = 148
 	distance_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	distance_label.add_theme_font_size_override("font_size", 20)
 	root.add_child(distance_label)

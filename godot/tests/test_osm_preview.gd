@@ -36,5 +36,31 @@ func _run() -> void:
 	var geo_manifest = JSON.parse_string(FileAccess.get_file_as_string("res://data/world/cieszyn_rynek_osm_2026/manifest.json"))
 	_check(geo_manifest is Dictionary and geo_manifest.get("terrain_status") == "MISSING", "No fictitious terrain heights")
 	_check(geo_manifest is Dictionary and geo_manifest.get("historical_year") == "2026", "OSM data not falsely labelled book-era history")
+	# Artificial test value must remain a TEST; never claim actual OSM heights.
+	var synthetic := {
+		"schema_version": 1, "type": "WORLD_METRIC_TILE",
+		"city_id": "CIESZYN_RYNEK", "year": "2026", "tile_size_m": 256,
+		"origin_east_m": 0, "origin_north_m": 0,
+		"features": [{
+			"id": "OSM_W999999998", "kind": "building", "name": "SYNTHETIC_TEST_ONLY",
+			"geometry_type": "Polygon", "elevation_status": "UNKNOWN_NO_TERRAIN",
+			"coordinates": [[[10, 10], [20, 10], [20, 20], [10, 20], [10, 10]]],
+			"height_m": 12.5, "height_source": "OSM_HEIGHT_TAG",
+			"height_status": "OSM_REPORTED_UNVERIFIED"
+		}]
+	}
+	_check(layer._import_tile(synthetic), "Tagged-height test fixture is accepted")
+	_check(layer.sourced_height_ids.has("OSM_W999999998"), "Explicit metres retained")
+	_check(layer.height_wireframe_count > 0, "Tagged-height vertical wireframe emitted")
+	var no_provenance := synthetic.duplicate(true)
+	no_provenance["features"][0].erase("height_source")
+	_check(not layer._import_tile(no_provenance), "Height missing provenance rejected")
+	var only_floors := synthetic.duplicate(true)
+	for attribute in ["height_m", "height_source", "height_status"]:
+		only_floors["features"][0].erase(attribute)
+	only_floors["features"][0]["building_levels"] = 4
+	only_floors["features"][0]["levels_status"] = "OSM_LEVEL_COUNT_ONLY_NOT_HEIGHT"
+	_check(layer._import_tile(only_floors), "Floor count is not converted to metres")
+	_check(layer.levels_only_ids.has("OSM_W999999998"), "Floor count tracked without 3D height")
 	print("WORLD OSM RUNTIME FAILURES: ", failures)
 	quit(0 if failures == 0 else 1)
