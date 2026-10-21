@@ -30,7 +30,7 @@ class OSMImportError(ValueError):
     pass
 
 
-HEIGHT_RE = re.compile(r"^([0-9]+(?:\\.[0-9]+)?)(?:\\s+m)?$")
+HEIGHT_RE = re.compile(r"^([0-9]+(?:\.[0-9]+)?)(?:\s+m)?$")
 LEVELS_RE = re.compile(r"^[0-9]{1,2}$")
 
 
