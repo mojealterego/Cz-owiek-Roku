@@ -11,6 +11,9 @@ var expected_source_id: String = "OPENSTREETMAP_2026_CIESZYN_RYNEK"
 var loaded: bool = false
 var building_ids: Dictionary = {}
 var road_ids: Dictionary = {}
+var sourced_height_ids: Dictionary = {}
+var levels_only_ids: Dictionary = {}
+var height_wireframe_count: int = 0
 var tile_count: int = 0
 var world_meshes: Array[MeshInstance3D] = []
 
@@ -71,6 +74,7 @@ func _import_tile(tile: Dictionary) -> bool:
 		return false
 	var building_vertices: PackedVector3Array = PackedVector3Array()
 	var road_vertices: PackedVector3Array = PackedVector3Array()
+	var height_vertices: PackedVector3Array = PackedVector3Array()
 	for raw in tile["features"]:
 		if not raw is Dictionary:
 			return false
@@ -87,15 +91,40 @@ func _import_tile(tile: Dictionary) -> bool:
 			return false
 		if kind == "building":
 			building_ids[id_text] = true
+			var real_height: float = 0.0
+			if feature.has("height_m"):
+				if feature.get("height_source", "") != "OSM_HEIGHT_TAG":
+					return false
+				if feature.get("height_status", "") != "OSM_REPORTED_UNVERIFIED":
+					return false
+				var raw_height: Variant = feature.get("height_m")
+				if not (raw_height is int or raw_height is float):
+					return false
+				real_height = float(raw_height)
+				if not is_finite(real_height) or real_height < 0.5 or real_height > 300.0:
+					return false
+				sourced_height_ids[id_text] = true
+			elif feature.has("height_source") or feature.has("height_status"):
+				return false
+			if feature.has("building_levels") and real_height == 0.0:
+				if feature.get("levels_status") != "OSM_LEVEL_COUNT_ONLY_NOT_HEIGHT":
+					return false
+				levels_only_ids[id_text] = true
 			if geometry_type == "Polygon":
 				for ring in coordinates:
 					if not _append_lines(building_vertices, ring, east_origin, north_origin, 0.65):
 						return false
+					if real_height > 0.0:
+						if not _append_height_wireframe(height_vertices, ring, east_origin, north_origin, real_height):
+							return false
 			elif geometry_type == "MultiPolygon":
 				for polygon in coordinates:
 					for ring in polygon:
 						if not _append_lines(building_vertices, ring, east_origin, north_origin, 0.65):
 							return false
+						if real_height > 0.0:
+							if not _append_height_wireframe(height_vertices, ring, east_origin, north_origin, real_height):
+								return false
 			else:
 				return false
 		elif kind == "road":
@@ -113,7 +142,24 @@ func _import_tile(tile: Dictionary) -> bool:
 			return false
 	_render_lines(road_vertices, Color(0.32, 0.64, 0.8), "OSM_ROADS_2026")
 	_render_lines(building_vertices, Color(0.94, 0.7, 0.37), "OSM_BUILDINGS_2026")
+	_render_lines(height_vertices, Color(0.45, 0.93, 0.68), "OSM_EXPLICIT_HEIGHT_WIREFRAME")
 	return true
+
+func _append_height_wireframe(vertices: PackedVector3Array, points: Array,
+		east_origin: float, north_origin: float, source_height_m: float) -> bool:
+	# Geometry stands on an UNKNOWN FLAT BASE, not a surveyed terrain surface.
+	# Vertical height comes ONLY from explicit OSM height=*, never floor count.
+	if not _append_lines(vertices, points, east_origin, north_origin, source_height_m + 0.65):
+		return false
+	for item in points:
+		if not item is Array or item.size() != 2:
+			return false
+		var east: float = float(item[0]) + east_origin
+		var north: float = float(item[1]) + north_origin
+		vertices.append(Vector3(east, 0.65, -north))
+		vertices.append(Vector3(east, source_height_m + 0.65, -north))
+	return true
+
 
 func _append_lines(vertices: PackedVector3Array, points: Array,
 		east_origin: float, north_origin: float, height: float) -> bool:
@@ -156,3 +202,5 @@ func _render_lines(vertices: PackedVector3Array, color: Color, surface_name: Str
 	instance.mesh = mesh
 	add_child(instance)
 	world_meshes.append(instance)
+	if surface_name == "OSM_EXPLICIT_HEIGHT_WIREFRAME":
+		height_wireframe_count += 1
