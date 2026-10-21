@@ -1,6 +1,6 @@
 extends Node3D
 ## WORLD 1:1 geodetic QA preview. Real public point coordinates only.
-## No geospatial buildings, terrain or surveyed facades are embedded.
+## Real OSM 2026 building outlines and roads; no surveyed terrain or facades.
 
 const REFERENCE_PATH := "res://data/world/reference_points.json"
 const TILE_SIZE_M := 256.0
@@ -42,7 +42,7 @@ func _ready() -> void:
 	distance_label.text = "%.1f m między ratuszami | OSM 2026: %d budynków, %d dróg, 13 sektorów" % [
 		d, osm_layer.building_ids.size() + cz_layer.building_ids.size(),
 		osm_layer.road_ids.size() + cz_layer.road_ids.size()]
-	distance_label.text += "\\nŹródłowe height=* (metry): %d | Kondygnacje nie są wysokością" % [osm_layer.sourced_height_ids.size() + cz_layer.sourced_height_ids.size()]
+	distance_label.text += "\nŹródłowe height=* (metry): %d | Kondygnacje nie są wysokością" % [osm_layer.sourced_height_ids.size() + cz_layer.sourced_height_ids.size()]
 	scene_valid = true
 	_refresh_camera()
 
