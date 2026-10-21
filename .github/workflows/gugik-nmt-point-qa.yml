@@ -1,0 +1,24 @@
+name: Polish official NMT single-point heights QA
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'geodata/gugik_nmt_point.py'
+      - 'geodata/test_gugik_nmt_point.py'
+      - '.github/workflows/gugik-nmt-point-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  point-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Strict offline response checks
+        run: python -m unittest geodata.test_gugik_nmt_point -v
+      - name: Three bounded official GUGiK point heights
+        run: python -m geodata.gugik_nmt_point --live-three-points
