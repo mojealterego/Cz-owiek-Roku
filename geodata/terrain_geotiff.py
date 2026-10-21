@@ -67,6 +67,7 @@ def export_geotiff(
     spacing_m: int = 32,
     internal_preview: bool = False,
     rights_approved: bool = False,
+    zero_is_unverified_nodata: bool = False,
 ) -> dict:
     for label in (city_id, source_id):
         if not isinstance(label, str) or not IDENT.fullmatch(label):
@@ -97,6 +98,7 @@ def export_geotiff(
     sha = hash_source(input_path)
     tiles: list[tuple[str, dict]] = []
     count_valid = 0
+    masked_unverified_zeros = 0
     with rasterio.open(input_path) as source:
         if source.driver != "GTiff" or source.count != 1 or source.crs is None:
             raise TerrainError("Input must be single-band, georeferenced GeoTIFF")
@@ -129,6 +131,13 @@ def export_geotiff(
                         heights.append(None)
                         continue
                     value = float(h)
+                    if zero_is_unverified_nodata and value == 0.0:
+                        # DMR5G Cieszyn raw ImageServer sometimes writes 0 for
+                        # uncovered areas without a TIFF nodata mask. Unknown
+                        # area must stay UNKNOWN, never become a flat 0m valley.
+                        heights.append(None)
+                        masked_unverified_zeros += 1
+                        continue
                     if not math.isfinite(value) or abs(value) > 12000:
                         heights.append(None)
                     else:
@@ -161,6 +170,9 @@ def export_geotiff(
         "tile_size_m": SIZE_M, "tile_count": len(tiles),
         "valid_sample_count": count_valid,
         "nodata_sample_count": sum(t["nodata_count"] for _, t in tiles),
+        "suspect_zero_value_masked_count": masked_unverified_zeros,
+        "zero_value_policy": ("MASKED_AS_UNVERIFIED_VOID_FOR_THIS_AREA"
+                              if zero_is_unverified_nodata else "SOURCE_PRESERVED"),
         "historical_facades_validated": False,
         "terrain_source_coverage_complete": False,
     }
@@ -189,6 +201,7 @@ def main() -> None:
     parser.add_argument("--spacing-m", type=int, default=32)
     parser.add_argument("--internal-preview", action="store_true")
     parser.add_argument("--rights-approved", action="store_true")
+    parser.add_argument("--zero-is-unverified-nodata", action="store_true")
     args = parser.parse_args()
     kw = vars(args)
     kw["input_path"] = kw.pop("input")

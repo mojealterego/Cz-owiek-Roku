@@ -13,3 +13,6 @@ Ustalona metadana usługi: poziomo S-JTSK (EPSG:5514), pionowo Bpv (identyfikato
 
 ## Nadal do wykonania
 Potwierdzić licencję i warunki tworzenia pochodnego zbioru, doprowadzić polski NMT do zgodnego układu wysokości, zatwierdzić epokę i poprawność NMT w najważniejszych lokacjach oraz rozwinąć runtime streaming i siatkę terenu. Bez realnych pomiarów nie twierdzić, że cyfrowy bliźniak 1:1 został zrealizowany.
+
+## QA z 21 października 2026
+Próbne pobranie usługi ImageServer zakończyło się sukcesem. Format GeoTIFF źródła zawierał niepełną definicję `LOCAL_CS` z autorytetem EPSG:5514; po potwierdzeniu CRS, geograficznych granic i rozdzielczości zakodowano pełne odniesienie poziome EPSG:5514 bez modyfikowania współrzędnych ani wartości wysokości. Wykryto również zerowe próbki w źródle, które w tym obszarze nie mogą być bez weryfikacji uznane za powierzchnię terenu. Tryb `--zero-is-unverified-nodata` oznacza je jako brak danych **tylko w sektorach QA**, zachowując oryginalny plik niezmieniony. Weryfikacja historyczna, prawna oraz pionowe zestrojenie z budynkami nadal pozostają otwarte.

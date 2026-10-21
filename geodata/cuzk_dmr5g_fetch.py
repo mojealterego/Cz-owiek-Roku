@@ -107,6 +107,10 @@ def fetch(destination: Path) -> dict:
                 raise DMRFetchError("Insufficient source elevation pixels")
             min_h = float(samples.min())
             max_h = float(samples.max())
+            zero_pixels = int((samples == 0.0).sum())
+            positive = samples[(samples > 100.0) & (samples < 1000.0)]
+            if positive.count() < 50:
+                raise DMRFetchError("Not enough plausible non-zero Cieszyn terrain values")
             if not (math.isfinite(min_h) and math.isfinite(max_h)
                     and -1000.0 < min_h <= max_h < 4000.0):
                 raise DMRFetchError("Implausible terrain pixel range")
@@ -130,7 +134,8 @@ def fetch(destination: Path) -> dict:
         "raw_sha256": hashlib.sha256(raw).hexdigest(),
         "horizontal_crs_retagged_after_validation": crs_repaired,
         "width": WIDTH, "height": HEIGHT,
-        "valid_pixels": valid_count, "min_sample_m": round(min_h, 3),
+        "valid_pixels": valid_count, "suspect_zero_pixels": zero_pixels,
+        "min_sample_m": round(min_h, 3),
         "max_sample_m": round(max_h, 3),
         "not_verified_for_game_release": True,
     }

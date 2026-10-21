@@ -37,7 +37,7 @@ jobs:
             --license-id CUZK_RIGHTS_REVIEW_REQUIRED \
             --vertical-datum CZ-BPV --source-epoch 2013 \
             --west -3 --east -2 --south -2 --north -1 \
-            --spacing-m 32 --internal-preview
+            --spacing-m 32 --zero-is-unverified-nodata --internal-preview
       - name: Verify real geographic raster was processed without distribution
         run: |
           python - <<'PY'
@@ -49,6 +49,7 @@ jobs:
           assert m['valid_sample_count'] > 10
           assert m['tile_count']==4
           assert m['rights_review_status']=='REVIEW_PENDING_INTERNAL_ONLY'
+          assert m['zero_value_policy']=='MASKED_AS_UNVERIFIED_VOID_FOR_THIS_AREA'
           assert m['vertical_registration_to_game']=='NOT_VERIFIED'
           print('REAL CUZK SOURCE TECHNICALLY VERIFIED, NO PUBLIC RASTER ARTIFACT')
           PY

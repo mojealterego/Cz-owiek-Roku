@@ -13,13 +13,15 @@ from rasterio.transform import from_origin
 from geodata.terrain_geotiff import TerrainError, export_geotiff
 
 
-def source_geotiff(root: Path, *, nodata: bool = False) -> Path:
+def source_geotiff(root: Path, *, nodata: bool = False, zero_void: bool = False) -> Path:
     px, py = Transformer.from_crs("EPSG:4326", "EPSG:2180",
                                   always_xy=True).transform(18.6332106, 49.74816)
     source = root / "SYNTHETIC_TEST_ONLY_NOT_ACTUAL_CIESZYN.tif"
     arr = np.full((130, 130), 307.5, dtype="float32")
     if nodata:
         arr[60:71, 60:71] = -9999.0
+    if zero_void:
+        arr[60:71, 60:71] = 0.0
     with rasterio.open(source, "w", driver="GTiff", height=130, width=130,
                        count=1, dtype="float32", crs="EPSG:2180",
                        transform=from_origin(px - 650, py + 650, 10, 10),
@@ -75,6 +77,21 @@ class TerrainTests(unittest.TestCase):
             found = [h for p in out.glob("E*.json")
                      for h in json.loads(p.read_text())["heights_m"] if h is None]
             self.assertTrue(found)
+
+    def test_suspect_zero_void_is_marked_unknown_not_ground(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            source = source_geotiff(root, zero_void=True)
+            out = root / "tiles"
+            summary = build(source, out, zero_is_unverified_nodata=True)
+            self.assertGreater(summary["suspect_zero_value_masked_count"], 0)
+            self.assertEqual(summary["zero_value_policy"], "MASKED_AS_UNVERIFIED_VOID_FOR_THIS_AREA")
+            masked = [v for p in out.glob("E*.json")
+                      for v in json.loads(p.read_text())["heights_m"] if v is None]
+            self.assertTrue(masked)
+            # Raw test source is not rewritten by output policy.
+            with rasterio.open(source) as original:
+                self.assertEqual(float(original.read(1)[65, 65]), 0.0)
 
     def test_license_and_datum_required(self):
         with tempfile.TemporaryDirectory() as d:
