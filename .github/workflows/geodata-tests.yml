@@ -25,7 +25,7 @@ jobs:
       - name: Install locked geospatial dependencies
         run: python -m pip install -r geodata/requirements.txt
       - name: Run metric geodata regression tests
-        run: python -m unittest geodata.test_geoetl -v
+        run: python -m unittest geodata.test_geoetl geodata.test_gugik_wcs_probe geodata.test_gugik_nmt_point -v
       - name: Build real georeferenced reference-point tiles (no fabricated buildings)
         run: |
           python -m geodata.geoetl \

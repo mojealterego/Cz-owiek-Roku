@@ -1,12 +1,5 @@
 name: Polish GUGiK real NMT WCS QA - source-only
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'geodata/gugik_nmt_live.py'
-      - 'geodata/test_gugik_nmt_live.py'
-      - '.github/workflows/gugik-nmt-live-qa.yml'
-      - 'geodata/terrain_geotiff.py'
   workflow_dispatch:
 permissions:
   contents: read

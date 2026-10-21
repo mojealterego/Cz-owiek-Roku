@@ -15,3 +15,6 @@ Wprowadzono `godot/scripts/terrain_qa_layer.gd`, ładujący lokalne **jedynie QA
 Czeski DMR5G Bpv nie jest automatycznie kompatybilny z polskim PL-KRON86-NH lub PL-EVRF2007-NH. Nie można łączyć siatki terenu z drogowym OSM 2D ani CityGML jako gotowego miasta, zanim nie ustali się fizycznego poziomu odniesienia i praw do źródłowych danych.
 
 **Status: silnik siatki QA działa po teście CI; rzeczywiste wysokości terenu nie są jeszcze wbudowane w grę.**
+
+## Walidacja z rzeczywistym źródłem, nie tylko fixture
+W przebiegu [GitHub Actions #39574730353](https://github.com/mojealterego/Cz-owiek-Roku/actions/runs/39574730353) pobrano oficjalny fragment DMR5G i wykonano pełną ścieżkę od rastra przez lokalne kafle JSON do `ArrayMesh` Godot. Rezultat: **4 siatki, 512 trójkątów, 324 próbki, wysokości 266,220–273,622m, zero błędów QA**. Próba wczytania pod datum PL-KRON86-NH została odrzucona, podobnie jak odczyt bez jawnego trybu QA. Żaden surowy raster ani kafel nie został załączony do repozytorium lub artefaktów CI.

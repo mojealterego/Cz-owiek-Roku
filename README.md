@@ -20,13 +20,23 @@ Miasta i miejsca fabuły muszą być **geograficznie odwzorowane w rzeczywistej 
 
 Pliki źródłowe: [Cieszyn 2026](geodata/snapshots/cieszyn_rynek_osm_2026.geojson) i [Český Těšín 2026](geodata/snapshots/cesky_tesin_center_osm_2026.geojson). Obie próbki to **rzeczywiste, niekompletne dane współczesne © OpenStreetMap contributors na licencji ODbL 1.0**, z tym samym punktem geograficznym i skalą 1 m = 1 jednostka Godot. [Godot map preview](godot/scenes/world_preview.tscn) wyświetla **płaskie obrysy**, nie sfabrykowane budynki 3D.
 
-Testy kodu i geometrii: [Godot CI, bez SCRIPT ERROR](https://github.com/mojealterego/Cz-owiek-Roku/actions/runs/39525476547). [Android ARM64 debug APK](https://github.com/mojealterego/Cz-owiek-Roku/actions/runs/39525476347). **Fizyczny Android nie został jeszcze przetestowany**. Nadal brak modeli terenu, zweryfikowanych wysokości budynków w tych dwóch wycinkach i elewacji, LiDAR i weryfikacji wyglądu historycznego 2023–2025.
+Testy kodu i geometrii: [Godot CI, bez SCRIPT ERROR](https://github.com/mojealterego/Cz-owiek-Roku/actions/runs/39525476547). [Android ARM64 debug APK](https://github.com/mojealterego/Cz-owiek-Roku/actions/runs/39525476347). **Fizyczny Android nie został jeszcze przetestowany**. W publicznym APK nadal brak modeli terenu i zweryfikowanych wysokości budynków w tych dwóch wycinkach i elewacji, LiDAR i weryfikacji wyglądu historycznego 2023–2025.
 
 ### Wysokości budynków i dane CityGML — najnowsza iteracja
 
 W dwóch pobranych wycinkach OSM sprawdzono 397 budynków. **Żaden nie posiada znacznika `height=*` z wysokością w metrach**; 225 budynków ma jedynie `building:levels` (36 PL + 189 CZ). Parser [OSM](geodata/osm_extract.py) i [metryczny ETL](geodata/geoetl.py) zachowują rozdzielenie tych informacji. [Godot](godot/scripts/osm_preview_layer.gd) tworzy drucianą bryłę o podanej wysokości **wyłącznie** dla budynków z jawnym źródłowym `height=*`; nie wyznacza wysokości z liczby kondygnacji. [Raport CI](https://github.com/mojealterego/Cz-owiek-Roku/actions/runs/39524348026).
 
 Dla polskich budynków przygotowano [importer oficjalnych modeli CityGML LoD1 2024](geodata/citygml_lod1.py) i [procedurę pozyskania](docs/WORLD_CITYGML_LOD1_GUGIK_2024.md). Parser obsługuje trójwymiarowe współrzędne powierzchni, `measuredHeight`, CRS i jawny wybór osi; [testy kontraktowe](https://github.com/mojealterego/Cz-owiek-Roku/actions/runs/39524991042) przeszły. **Oryginalna paczka modeli GUGiK dla powiatu cieszyńskiego nie jest jeszcze pobrana, a testy parsera wykorzystują wyłącznie oznaczoną jako syntetyczną geometrię.** Dopóki nie ma danych LiDAR/NMT i historycznych referencji, żadna bryła nie jest odbierana jako finalny cyfrowy bliźniak.
+
+### Weryfikacja 3D rzeczywistego terenu ČÚZK w Godot
+
+- Oficjalny czeski DMR5G (wysokości Bpv, poziomo EPSG:5514) został pobrany i przekonwertowany na 4 sektory metryczne: 324 próbki i 512 trójkątów.
+- Zintegrowany [renderer źródłowego terenu QA](godot/scripts/terrain_qa_layer.gd) poprawnie zbudował siatkę o wysokościach **266,220–273,622 m** w Godot 4.5.2.
+- [Test kompletnej ścieżki ČÚZK → GeoTIFF → sektory → mesh Godot](https://github.com/mojealterego/Cz-owiek-Roku/actions/runs/39574730353): **SUCCESS; 0 błędów**.
+- Materiały źródłowe pozostają **wyłącznie na tymczasowym runnerze CI**, bez publikacji rastra lub pochodnej geometrii: weryfikacja praw i pionowe uzgodnienie PL/CZ pozostają otwarte.
+- Ten test nie dowodzi jeszcze uruchomienia rzeczywistego terenu w APK, nie zastępuje fotogrametrii, elewacji, modelowania całego miasta ani historycznej zgodności z latami fabularnymi.
+
+Polska strona: zaimplementowano [sondę WCS GUGiK](geodata/gugik_wcs_probe.py), [walidator GetCoverage](geodata/gugik_nmt_live.py) i [sondę punktową NMT](geodata/gugik_nmt_point.py). Usługa udostępniła identyfikator `DTM_PL-KRON86-NH_TIFF` oraz kolejność osi `y,x`. Pobieranie rastra zostało przerwane po stronie serwera, a zapytanie punktowe po korekcie orientacji zakończyło się HTTP 502. **Polskie wysokości nie zostały pozyskane.** [Diagnostyka źródła](docs/WORLD_1_TO_1_GUGIK_NMT_SOURCE.md).
 
 ### Obecny postęp WORLD.03
 

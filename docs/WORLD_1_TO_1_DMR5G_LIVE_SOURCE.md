@@ -22,3 +22,6 @@ Próbne pobranie usługi ImageServer zakończyło się sukcesem. Format GeoTIFF 
 - Źródłowy raster: 450 × 450 pikseli Float32, Bpv, układ poziomy 5514; 26 561 wartości zero w pełnym wycinku wymagających ostrożnego traktowania jako potencjalny brak danych.
 - Wybrane cztery sektory 256 × 256 m: 324 próbek rzeczywistych, zero braków po zastosowaniu maski kontrolnej. **Nie oznacza to kompletnego pokrycia miasta.**
 - Dokładności pionowej oraz zgodności z polskim datum nie przyjęto jako zweryfikowanej. Zabezpieczono wynik przed automatycznym eksportem publicznym.
+
+## Weryfikacja natywnego silnika 3D
+[CI #39574730353](https://github.com/mojealterego/Cz-owiek-Roku/actions/runs/39574730353): po pobraniu rzeczywistego DMR5G i wyprodukowaniu czterech kafli wysokościowych runner uruchomił Godot 4.5.2 i wygenerował 512 trójkątów 3D z 324 próbek. Testy pionowego datum, braków i kontroli licencyjnej były dodatnie; rzeczywiste NMT NIE jest jeszcze załączone do publicznej gry. Główne cele następne: jawna zgoda licencyjna, zgodność polsko-czeska w pionie oraz model terenu w APK.

@@ -1,11 +1,5 @@
 name: Polish official NMT single-point heights QA
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'geodata/gugik_nmt_point.py'
-      - 'geodata/test_gugik_nmt_point.py'
-      - '.github/workflows/gugik-nmt-point-qa.yml'
   workflow_dispatch:
 permissions:
   contents: read

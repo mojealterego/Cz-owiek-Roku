@@ -17,6 +17,8 @@
 | WORLD.03d | Importer prawdziwej geometrii GUGiK CityGML LoD1 2024 | SOURCE IMPORTER VERIFIED, REAL ARCHIVE PENDING | walidacja 3D posList, CRS, measuredHeight; run 39524991042 |
 | WORLD.03e | DEM/NMT GeoTIFF → metryczne sektory 256 m PL/CZ | IMPLEMENTED AND QA TESTED; CZ REAL RASTER INTERNALLY SAMPLED | źródło + datum wysokościowy + identyczność krawędzi + NoData |
 | WORLD.03f | Rzeczywisty czeski raster DMR5G z ČÚZK | REAL CZ GEO TIFF QA VERIFIED; RIGHTS AND VERTICAL REGISTRATION PENDING | EPSG:5514 / CZ-BPV; 4 kafle; 324 źródłowe próbki; run 39570793520; niepublikowane |
+| WORLD.03g | Polska NMT GUGiK WCS i punktowe QA | METADATA VERIFIED; DOWNLOAD BLOCKED | ID DTM_PL-KRON86-NH_TIFF, osi WCS y,x; GetCoverage disconnected; po korekcie GetHByXY HTTP 502 |
+| WORLD.03h | Rzeczywisty czeski DMR5G → siatka 3D Godot | INTERNAL QA VERIFIED, NOT DISTRIBUTED | 4 sektory, 324 źródłowe próbki, 512 trójkątów, 266,220–273,622m; run 39574730353 |
 | WORLD.04 | Pełne historyczne miasta 1:1: Cieszyn/Český Těšín i pozostałe | NOT STARTED (ONLY 2D PARTIAL BASEMAP) | komplet miasta, źródłowe wysokości, teren, fotogrametria i foto-match |
 | WORLD.05 | Historyczne warianty i streaming sektorów Android | NOT STARTED | profil urządzenia + zatwierdzona rekonstrukcja |
 | WORLD.06 | Debugowy podgląd metrycznych 2 ratuszy i 13 kafli OSM PL/CZ na Android | BUILD VERIFIED; DEVICE UNTESTED | strict Godot runtime run 39525476547; APK run 39525476347 |
@@ -27,6 +29,8 @@
 
 ## Reguła statusów
 `DONE` tylko dla faktycznie zapisanych i sprawdzonych artefaktów. `DRAFT` nie oznacza akceptacji. `NOT STARTED` nie jest równoznaczne z niemożliwością. Godot CI uruchomił scenę i wyeksportował debug APK. Nie jest to benchmark telefonu, test dotyku, ani dowód osiągnięcia jakości AAA.
+
+**Nowy dowód WORLD.03h:** Ciąg pobieranie ČÚZK → kontrola GeoTIFF → metryczny ETL → 4 prawdziwe siatki 3D w Godot został ukończony w CI (run 39574730353). Dane pozostają prywatne, w APK nie ma jeszcze rzeczywistego NMT. Pobranie PL NMT wymaga powtórnej próby GUGiK lub importu oficjalnego arkusza plikowego z jawnym pionowym datum. Nie wolno zgadywać transformacji KRON86 ↔ Bpv.
 
 ## Następny etap
 Priorytet: etap WORLD.02 — mapowanie scen książki na konkretne miejsca i daty, a następnie WORLD.03 — pozyskanie rzeczywistych warstw dróg, obrysów budynków, NMT i rekonstrukcji historycznych z GUGiK/ČÚZK. Działający ETL pozyskał dwa bieżące wycinki OSM (397 obrysów budynków, 145 dróg) i sprawdził znaczniki wysokości: 0 height w metrach, 225 budynków z liczbą kondygnacji. Powstał testowany importer oficjalnego CityGML LoD1 2024; rzeczywista paczka powiatowa GUGiK, LiDAR, NMT i historyczne warianty nadal nie zostały zaimportowane. Demo Godot renderuje obrysy bez zmyślonych kondygnacji. Równolegle: rzeczywisty test istniejącego APK na telefonie (instalacja, klatki, interfejs, zapis, zdjęcia i powrót do gry). Potem wymiana scenografii testowej na modele produkcyjne. Równolegle odseparować chronione zasoby, skorygować scenariusz na podstawie wersji książki zatwierdzonej do ekranizacji i ukończyć pipeline modeli.

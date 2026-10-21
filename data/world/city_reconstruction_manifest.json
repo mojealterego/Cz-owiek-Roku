@@ -20,7 +20,10 @@
     "streaming_status": "NOT_IMPLEMENTED",
     "preview_status": "TWO_PUBLIC_LANDMARKS_AND_13_REAL_OSM_TILES_CURRENT_2026",
     "preview_godot_status": "REAL_2D_FOOTPRINTS_ROADS_HEADLESS_CI_VERIFIED_ANDROID_PHYSICAL_UNTESTED",
-    "source_building_road_terrain_status": "PARTIAL_CURRENT_OSM_BUILDING_FOOTPRINTS_AND_ROADS_IMPORTED_TERRAIN_MISSING"
+    "source_building_road_terrain_status": "PARTIAL_CURRENT_OSM_BUILDING_FOOTPRINTS_AND_ROADS_IMPORTED_TERRAIN_MISSING",
+    "cz_terrain_private_qa_status": "REAL_DMR5G_IN_GODOT_TRIANGLES_VERIFIED_INTERNAL_ONLY",
+    "cz_terrain_public_asset_included": false,
+    "pl_terrain_status": "WCS_CAPABILITIES_OK_GETCOVERAGE_AND_POINT_FETCH_UNAVAILABLE"
   },
   "proposed_acceptance_tolerances": {
     "note": "Targets to approve after evaluating source data accuracy; NOT achieved measurements.",
@@ -317,5 +320,19 @@
     "source_year": 2024,
     "source_measured_height_status": "APPROXIMATE_PER_GUGIK_METHOD",
     "vertical_crs": "REQUIRES_DATASET_VERIFICATION"
+  },
+  "terrain_internal_qa_evidence": {
+    "run_id": 39574730353,
+    "city_id": "CZ-CESKY-TESIN",
+    "source": "ČÚZK DMR5G ImageServer",
+    "source_vertical_datum": "CZ-BPV",
+    "tile_count": 4,
+    "sample_count": 324,
+    "triangle_count": 512,
+    "min_elevation_m": 266.22,
+    "max_elevation_m": 273.622,
+    "public_asset_included": false,
+    "physical_android_tested": false,
+    "full_city_coverage": false
   }
 }
