@@ -1,0 +1,28 @@
+name: GUGiK CityGML LoD1 importer contract
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'geodata/citygml_lod1.py'
+      - 'geodata/test_citygml_lod1.py'
+      - '.github/workflows/citygml-lod1-tests.yml'
+  pull_request:
+    paths:
+      - 'geodata/citygml_lod1.py'
+      - 'geodata/test_citygml_lod1.py'
+      - '.github/workflows/citygml-lod1-tests.yml'
+permissions:
+  contents: read
+jobs:
+  test-citygml:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install geographic transformation and XML validation
+        run: python -m pip install -r geodata/requirements.txt
+      - name: Validate strict 3D GML coordinates and source-height metadata
+        run: python -m unittest geodata.test_citygml_lod1 -v
