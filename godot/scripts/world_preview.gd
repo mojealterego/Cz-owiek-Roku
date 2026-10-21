@@ -24,7 +24,7 @@ func _ready() -> void:
 	_create_ui()
 	osm_layer = preload("res://scripts/osm_tile_streamer.gd").new()
 	add_child(osm_layer)
-	cz_layer = preload("res://scripts/osm_preview_layer.gd").new()
+	cz_layer = preload("res://scripts/osm_tile_streamer.gd").new()
 	cz_layer.world_root = "res://data/world/cesky_tesin_center_osm_2026"
 	cz_layer.expected_city_id = "CESKY_TESIN_CENTER"
 	cz_layer.expected_source_id = "OPENSTREETMAP_2026_CESKY_TESIN_CENTER"
