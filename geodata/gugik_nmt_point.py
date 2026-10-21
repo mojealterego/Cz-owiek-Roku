@@ -44,12 +44,19 @@ def parse_height(data: bytes) -> float:
     return v
 
 
-def sample_one(x: float, y: float) -> float:
-    if not (470000 < x < 478000 and 206000 < y < 212000):
+def point_url(east_m: float, north_m: float) -> str:
+    # Historic GUGiK API uses surveying X=Northing, Y=Easting,
+    # NOT PROJ's always_xy easting,northing order.
+    if not (470000 < east_m < 478000 and 206000 < north_m < 212000):
         raise PolishPointError("Outside strictly bounded Cieszyn testing radius")
-    url = BASE + "?" + urlencode({
-        "request": "GetHByXY", "x": f"{x:.3f}", "y": f"{y:.3f}"
+    return BASE + "?" + urlencode({
+        "request": "GetHByXY",
+        "x": f"{north_m:.3f}", "y": f"{east_m:.3f}",
     })
+
+
+def sample_one(east_m: float, north_m: float) -> float:
+    url = point_url(east_m, north_m)
     request = Request(url, headers={"User-Agent": USER_AGENT, "Accept": "text/plain,*/*"})
     with urlopen(request, timeout=20) as response:
         body = response.read(201)
@@ -62,11 +69,12 @@ def run() -> dict:
         if idx:
             time.sleep(0.4)  # courtesy delay, only 3 points, no service scraping
         h = sample_one(x, y)
-        elevations.append({"id": name, "epsg2180_xy": [x, y], "height_m": h})
+        elevations.append({"id": name, "epsg2180_east_north": [x, y], "height_m": h})
     return {
         "source": BASE,
         "source_request": "GetHByXY",
         "xy_crs": "EPSG:2180",
+        "api_parameter_order": "x=northing,y=easting",
         "height_datum_documented": "PL-KRON86-NH",
         "height_datum_site_verified": False,
         "source_acquisition_epoch": "UNKNOWN",
