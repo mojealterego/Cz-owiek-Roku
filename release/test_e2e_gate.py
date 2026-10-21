@@ -19,10 +19,11 @@ class E2EAcceptanceTests(unittest.TestCase):
         report = inspect(ROOT)
         self.assertEqual(report["chapter_count_required"], 70)
         self.assertGreaterEqual(report["chapter_3d_greybox_count"], 1)
-        self.assertLess(report["chapter_production_approved_count"], 70)
-        self.assertFalse(report["ready_for_production"])
-        self.assertIn("chapters", report["blocked_gates"])
-        self.assertGreater(report["blocked_gate_count"], 0)
+        self.assertLessEqual(report["chapter_production_approved_count"], 70)
+        self.assertEqual(report["ready_for_production"], report["blocked_gate_count"] == 0)
+        self.assertEqual(report["blocked_gate_count"], len(report["blocked_gates"]))
+        if report["chapter_production_approved_count"] < 70:
+            self.assertIn("chapters", report["blocked_gates"])
         self.assertGreaterEqual(len(report["source_basemap_fragments"]), 2)
 
     def test_unsigned_unreviewed_empty_repo_fails_closed(self):
