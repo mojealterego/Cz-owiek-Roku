@@ -20,7 +20,8 @@
 | WORLD.03g | Polska NMT GUGiK WCS i punktowe QA | METADATA VERIFIED; DOWNLOAD BLOCKED | ID DTM_PL-KRON86-NH_TIFF, osi WCS y,x; GetCoverage disconnected; po korekcie GetHByXY HTTP 502 |
 | WORLD.03h | Rzeczywisty czeski DMR5G → siatka 3D Godot | INTERNAL QA VERIFIED, NOT DISTRIBUTED | 4 sektory, 324 źródłowe próbki, 512 trójkątów, 266,220–273,622m; run 39574730353 |
 | WORLD.04 | Pełne historyczne miasta 1:1: Cieszyn/Český Těšín i pozostałe | NOT STARTED (ONLY 2D PARTIAL BASEMAP) | komplet miasta, źródłowe wysokości, teren, fotogrametria i foto-match |
-| WORLD.05 | Historyczne warianty i streaming sektorów Android | NOT STARTED | profil urządzenia + zatwierdzona rekonstrukcja |
+| WORLD.05 | Historyczne warianty i produkcyjny streaming Android | PARTIAL (CURRENT OSM ONLY); HISTORY & PERF PENDING | prototyp streamer zweryfikowany CI; wymagane LOD/FPS/RAM, dane 3D i historia |
+| WORLD.05a | Streamer bieżących sektorów OSM, indeks 256 m | GODOT CI VERIFIED, DEVICE UNTESTED | 13 sektorów indeksowanych, max 6/miasto, max 2 ładowania/klatkę/miasto, eviction; run 39586189163 |
 | WORLD.06 | Debugowy podgląd metrycznych 2 ratuszy i 13 kafli OSM PL/CZ na Android | BUILD VERIFIED; DEVICE UNTESTED | strict Godot runtime run 39525476547; APK run 39525476347 |
 | G3 | Modele 3D, facial rig, animacje, tatuaże | NOT STARTED | zatwierdzone modele z wydajnością LOD |
 | G4 | 70 pełnych grywalnych rozdziałów | NOT STARTED | scenariusze, sceny, decyzje, aktorstwo, testy |

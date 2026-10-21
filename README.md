@@ -38,6 +38,17 @@ Dla polskich budynków przygotowano [importer oficjalnych modeli CityGML LoD1 20
 
 Polska strona: zaimplementowano [sondę WCS GUGiK](geodata/gugik_wcs_probe.py), [walidator GetCoverage](geodata/gugik_nmt_live.py) i [sondę punktową NMT](geodata/gugik_nmt_point.py). Usługa udostępniła identyfikator `DTM_PL-KRON86-NH_TIFF` oraz kolejność osi `y,x`. Pobieranie rastra zostało przerwane po stronie serwera, a zapytanie punktowe po korekcie orientacji zakończyło się HTTP 502. **Polskie wysokości nie zostały pozyskane.** [Diagnostyka źródła](docs/WORLD_1_TO_1_GUGIK_NMT_SOURCE.md).
 
+### WORLD.05a — strumieniowanie OSM na Androidzie (wdrożone)
+
+[Kontroler strumieniowania Godot](godot/scripts/osm_tile_streamer.gd) jest obecnie używany przez [mapę gry](godot/scripts/world_preview.gd). Każde z dwóch miast posiada niezależny indeks **rzeczywistych** sektorów OSM i limit maksymalnie 6 jednocześnie aktywnych sektorów. Dla każdego z miast kontroler wczytuje nie więcej niż 2 sektory na klatkę i usuwa sektory opuszczające promień wokół kamery. **Są to sektory geometrii 2D, nie gotowy świat historyczny 3D.**
+
+Potwierdzone przypadki testowe: brak wczytywania bez pozycji kamery; limit liczby sektorów; zmiana banku Olzy; odciążenie dalekich sektorów; blokada nieznanego źródła; kontrola metrycznych originów i licencji ODbL.
+
+[GitHub Actions — strumieniowanie, testy sceny i import OSM: SUKCES](https://github.com/mojealterego/Cz-owiek-Roku/actions/runs/39586189163).
+[GitHub Actions — Android debug APK: SUKCES](https://github.com/mojealterego/Cz-owiek-Roku/actions/runs/39586189203).
+
+**Nie przeprowadzono pomiarów RAM, GPU, FPS ani testów wydajności na fizycznym telefonie.** Wczytanie danych jest obecnie ograniczone liczbą sektorów na klatkę, ale nadal synchroniczne, z dostępem do plików i generacją meshy na głównym wątku; przed większą mapą wymaga profilowania i ewentualnego przesunięcia dekodowania do wątków roboczych.
+
 ### Obecny postęp WORLD.03
 
 - [Importer GeoJSON PL/CZ w metrach](geodata/geoetl.py) — przeliczenie EPSG:4326/2180/5514, kontrola licencji i pochodzenia, sektorowanie bez kompresji odległości.

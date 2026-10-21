@@ -17,13 +17,14 @@
       "2025"
     ],
     "coordinate_transform_status": "IMPLEMENTED_IN_GEOETL_CI_TESTED_FULL_CITY_IMPORT_PENDING",
-    "streaming_status": "NOT_IMPLEMENTED",
+    "streaming_status": "CURRENT_2026_OSM_TILE_STREAMER_CI_VERIFIED_NOT_HISTORICAL_WORLD",
     "preview_status": "TWO_PUBLIC_LANDMARKS_AND_13_REAL_OSM_TILES_CURRENT_2026",
     "preview_godot_status": "REAL_2D_FOOTPRINTS_ROADS_HEADLESS_CI_VERIFIED_ANDROID_PHYSICAL_UNTESTED",
     "source_building_road_terrain_status": "PARTIAL_CURRENT_OSM_BUILDING_FOOTPRINTS_AND_ROADS_IMPORTED_TERRAIN_MISSING",
     "cz_terrain_private_qa_status": "REAL_DMR5G_IN_GODOT_TRIANGLES_VERIFIED_INTERNAL_ONLY",
     "cz_terrain_public_asset_included": false,
-    "pl_terrain_status": "WCS_CAPABILITIES_OK_GETCOVERAGE_AND_POINT_FETCH_UNAVAILABLE"
+    "pl_terrain_status": "WCS_CAPABILITIES_OK_GETCOVERAGE_AND_POINT_FETCH_UNAVAILABLE",
+    "streaming_real_phone_performance_verified": false
   },
   "proposed_acceptance_tolerances": {
     "note": "Targets to approve after evaluating source data accuracy; NOT achieved measurements.",
@@ -334,5 +335,20 @@
     "public_asset_included": false,
     "physical_android_tested": false,
     "full_city_coverage": false
+  },
+  "streaming_2026_osm_preview": {
+    "source_cities": 2,
+    "sector_count_available": 13,
+    "per_city_resident_sector_max": 6,
+    "per_city_tile_loads_per_frame_max": 2,
+    "sector_size_m": 256,
+    "implementation": "godot/scripts/osm_tile_streamer.gd",
+    "zone_sources": "CURRENT_OSM_2026_ODBL",
+    "target_platform": "Android ARM64 debug",
+    "ci_godot_success_run": 39586189163,
+    "ci_android_export_success_run": 39586189203,
+    "historical_city_complete": false,
+    "terrain_3d_in_public_apk": false,
+    "physical_android_benchmarks_status": "NOT_PERFORMED"
   }
 }
