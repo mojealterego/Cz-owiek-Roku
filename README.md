@@ -20,7 +20,13 @@ Miasta i miejsca fabuły muszą być **geograficznie odwzorowane w rzeczywistej 
 
 Pliki źródłowe: [Cieszyn 2026](geodata/snapshots/cieszyn_rynek_osm_2026.geojson) i [Český Těšín 2026](geodata/snapshots/cesky_tesin_center_osm_2026.geojson). Obie próbki to **rzeczywiste, niekompletne dane współczesne © OpenStreetMap contributors na licencji ODbL 1.0**, z tym samym punktem geograficznym i skalą 1 m = 1 jednostka Godot. [Godot map preview](godot/scenes/world_preview.tscn) wyświetla **płaskie obrysy**, nie sfabrykowane budynki 3D.
 
-Testy kodu i geometrii: [Godot CI, bez SCRIPT ERROR](https://github.com/mojealterego/Cz-owiek-Roku/actions/runs/39468814086). [Android ARM64 debug APK](https://github.com/mojealterego/Cz-owiek-Roku/actions/runs/39468813871). **Fizyczny Android nie został jeszcze przetestowany**. Nadal brak modeli terenu, wysokości i elewacji, LiDAR i weryfikacji wyglądu historycznego 2023–2025.
+Testy kodu i geometrii: [Godot CI, bez SCRIPT ERROR](https://github.com/mojealterego/Cz-owiek-Roku/actions/runs/39525476547). [Android ARM64 debug APK](https://github.com/mojealterego/Cz-owiek-Roku/actions/runs/39525476347). **Fizyczny Android nie został jeszcze przetestowany**. Nadal brak modeli terenu, zweryfikowanych wysokości budynków w tych dwóch wycinkach i elewacji, LiDAR i weryfikacji wyglądu historycznego 2023–2025.
+
+### Wysokości budynków i dane CityGML — najnowsza iteracja
+
+W dwóch pobranych wycinkach OSM sprawdzono 397 budynków. **Żaden nie posiada znacznika `height=*` z wysokością w metrach**; 225 budynków ma jedynie `building:levels` (36 PL + 189 CZ). Parser [OSM](geodata/osm_extract.py) i [metryczny ETL](geodata/geoetl.py) zachowują rozdzielenie tych informacji. [Godot](godot/scripts/osm_preview_layer.gd) tworzy drucianą bryłę o podanej wysokości **wyłącznie** dla budynków z jawnym źródłowym `height=*`; nie wyznacza wysokości z liczby kondygnacji. [Raport CI](https://github.com/mojealterego/Cz-owiek-Roku/actions/runs/39524348026).
+
+Dla polskich budynków przygotowano [importer oficjalnych modeli CityGML LoD1 2024](geodata/citygml_lod1.py) i [procedurę pozyskania](docs/WORLD_CITYGML_LOD1_GUGIK_2024.md). Parser obsługuje trójwymiarowe współrzędne powierzchni, `measuredHeight`, CRS i jawny wybór osi; [testy kontraktowe](https://github.com/mojealterego/Cz-owiek-Roku/actions/runs/39524991042) przeszły. **Oryginalna paczka modeli GUGiK dla powiatu cieszyńskiego nie jest jeszcze pobrana, a testy parsera wykorzystują wyłącznie oznaczoną jako syntetyczną geometrię.** Dopóki nie ma danych LiDAR/NMT i historycznych referencji, żadna bryła nie jest odbierana jako finalny cyfrowy bliźniak.
 
 ### Obecny postęp WORLD.03
 
@@ -53,9 +59,9 @@ Książka (409 stron) jest kanonem. Najnowsze decyzje autora mają pierwszeństw
 
 ## Pobierz i uruchom APK Android
 
-- [GitHub Actions — poprawny build APK i zapis artefaktu](https://github.com/mojealterego/Cz-owiek-Roku/actions/runs/39468813871). Otwórz `Artifacts → man-of-the-year-android-debug`, pobierz ZIP, rozpakuj `man-of-the-year-debug.apk`.
-- Format: Android ARM64, kompilacja debug, 27 729 364 B.
-- SHA-256 pliku APK: `c8e07a8d7af5f6676d672f31cabf933ad8d258ce1ad4f0aa49ec72b45f6e7783`.
+- [GitHub Actions — poprawny build APK i zapis artefaktu](https://github.com/mojealterego/Cz-owiek-Roku/actions/runs/39525476347). Otwórz `Artifacts → man-of-the-year-android-debug`, pobierz ZIP, rozpakuj `man-of-the-year-debug.apk`.
+- Format: Android ARM64, kompilacja debug, 27 733 460 B.
+- SHA-256 pliku APK: `6385ea1e993b5bcbc131e75745b985cd4f5af220505b1dfd4ddddc42abd5e17d`.
 - Zainstaluj debug APK na urządzeniu obsługującym ARM64 i OpenGL ES 3.0. Jest to eksperymentalny build do odbioru, a nie wersja produkcyjna. Jeśli poprzedni debug APK ma inny klucz podpisu, konieczne może być odinstalowanie poprzedniej wersji (co usuwa jej lokalne dane).
 
 ## Natywny prototyp: zawartość

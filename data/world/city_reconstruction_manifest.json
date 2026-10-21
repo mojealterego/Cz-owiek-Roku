@@ -295,6 +295,27 @@
       ],
       "godot_runtime_run": 39468814086,
       "android_export_run": 39468813871
+    },
+    "height_tag_audit": {
+      "audit_date": "2026-10-21",
+      "height_m_from_osm_count": 0,
+      "buildings_with_levels_only_count": 225,
+      "buildings_without_height_or_levels_count": 172,
+      "inferred_heights_count": 0,
+      "source_import_run": 39524348026,
+      "source_status": "CURRENT_OSM_SNAPSHOT_NOT_HISTORICALLY_VERIFIED"
     }
+  },
+  "gugik_citygml_lod1_2024": {
+    "source": "GUGiK — Geoportal 3D buildings / BDOT10k + ALS LiDAR + NMT",
+    "publisher_reference_url": "https://www.geoportal.gov.pl/pl/dane/inne-dane/modele-3d-budynkow/",
+    "importer": "geodata/citygml_lod1.py",
+    "ci_test_run": 39524991042,
+    "importer_test_status": "SUCCESS_SYNTHETIC_FIXTURE",
+    "actual_cieszyn_county_archive_status": "NOT_DOWNLOADED",
+    "actual_buildings_3d_imported": 0,
+    "source_year": 2024,
+    "source_measured_height_status": "APPROXIMATE_PER_GUGIK_METHOD",
+    "vertical_crs": "REQUIRES_DATASET_VERIFICATION"
   }
 }
