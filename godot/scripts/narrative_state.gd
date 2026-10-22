@@ -2,6 +2,8 @@ extends RefCounted
 ## Isolated reference state for the Godot vertical slice; no source dialogue is stored here.
 
 const SCHEMA: int = 1
+const MAX_SAVE_BYTES: int = 65536
+const MAX_SHOTS: int = 256
 const CANONICAL_ENDING: String = "CCR_MAIN_INEVITABLE_END"
 
 var language: String = "pl"
@@ -70,13 +72,26 @@ static func from_dictionary(raw: Variant) -> RefCounted:
 		if value in s.inspected:
 			return null
 		s.inspected.append(value)
+	if raw["shots"].size() > MAX_SHOTS:
+		return null
 	for path in raw["shots"]:
-		if not path is String or not path.begins_with("user://photos/") or not path.ends_with(".png"):
+		if not path is String or not _valid_photo_path(path):
 			return null
 		if path in s.shots:
 			return null
 		s.shots.append(path)
 	return s
+
+static func _valid_photo_path(path: String) -> bool:
+	if path.length() > 160 or not path.begins_with("user://photos/") or not path.ends_with(".png"):
+		return false
+	var filename: String = path.trim_prefix("user://photos/").trim_suffix(".png")
+	if filename.is_empty() or filename == "." or filename == "..":
+		return false
+	for character in filename:
+		if not (character in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-"):
+			return false
+	return true
 
 func write_save() -> bool:
 	var target: String = ProjectSettings.globalize_path("user://moty.save.json")
@@ -84,7 +99,12 @@ func write_save() -> bool:
 	var file: FileAccess = FileAccess.open(temp, FileAccess.WRITE)
 	if file == null:
 		return false
-	file.store_string(JSON.stringify(to_dictionary()))
+	var payload: String = JSON.stringify(to_dictionary())
+	if payload.to_utf8_buffer().size() > MAX_SAVE_BYTES:
+		file.close()
+		DirAccess.remove_absolute(temp)
+		return false
+	file.store_string(payload)
 	file.flush()
 	file.close()
 	var result: Error = DirAccess.rename_absolute(temp, target)
@@ -93,6 +113,10 @@ func write_save() -> bool:
 static func read_save() -> RefCounted:
 	if not FileAccess.file_exists("user://moty.save.json"):
 		return null
-	var raw_text: String = FileAccess.get_file_as_string("user://moty.save.json")
+	var handle: FileAccess = FileAccess.open("user://moty.save.json", FileAccess.READ)
+	if handle == null or handle.get_length() > MAX_SAVE_BYTES:
+		return null
+	var raw_text: String = handle.get_buffer(handle.get_length()).get_string_from_utf8()
+	handle.close()
 	var data: Variant = JSON.parse_string(raw_text)
 	return from_dictionary(data)
