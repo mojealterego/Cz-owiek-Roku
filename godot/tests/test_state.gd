@@ -52,12 +52,22 @@ func _run() -> void:
 	invalid["shots"] = ["user://photos/photo_01.png"]
 	check(State.from_dictionary(invalid) != null, "accepts safe photo path")
 	var oversized_path: String = "user://moty.save.json"
+	var backup_path: String = "user://moty.save.json.test_backup"
+	var had_existing: bool = FileAccess.file_exists(oversized_path)
+	if had_existing:
+		check(DirAccess.rename_absolute(ProjectSettings.globalize_path(oversized_path), ProjectSettings.globalize_path(backup_path)) == OK, "backup existing save before test")
+		if FileAccess.file_exists(oversized_path):
+			failed += 1
+			quit(1)
+			return
 	var oversized: FileAccess = FileAccess.open(oversized_path, FileAccess.WRITE)
 	check(oversized != null, "create oversized save fixture")
 	if oversized != null:
 		oversized.store_string("x".repeat(State.MAX_SAVE_BYTES + 1))
 		oversized.close()
 		check(State.read_save() == null, "reject oversized save before parsing")
-		DirAccess.remove_absolute(ProjectSettings.globalize_path(oversized_path))
+		check(DirAccess.remove_absolute(ProjectSettings.globalize_path(oversized_path)) == OK, "remove oversized fixture")
+	if had_existing:
+		check(DirAccess.rename_absolute(ProjectSettings.globalize_path(backup_path), ProjectSettings.globalize_path(oversized_path)) == OK, "restore existing save")
 	print("TESTS FAILED: ", failed)
 	quit(0 if failed == 0 else 1)
