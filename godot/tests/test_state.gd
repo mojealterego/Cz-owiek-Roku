@@ -51,5 +51,13 @@ func _run() -> void:
 	invalid = serialized.duplicate(true)
 	invalid["shots"] = ["user://photos/photo_01.png"]
 	check(State.from_dictionary(invalid) != null, "accepts safe photo path")
+	var oversized_path: String = "user://moty.save.json"
+	var oversized: FileAccess = FileAccess.open(oversized_path, FileAccess.WRITE)
+	check(oversized != null, "create oversized save fixture")
+	if oversized != null:
+		oversized.store_string("x".repeat(State.MAX_SAVE_BYTES + 1))
+		oversized.close()
+		check(State.read_save() == null, "reject oversized save before parsing")
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(oversized_path))
 	print("TESTS FAILED: ", failed)
 	quit(0 if failed == 0 else 1)
