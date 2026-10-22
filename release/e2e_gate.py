@@ -80,7 +80,7 @@ def inspect(root: Path) -> dict[str, Any]:
             "tile_count": entry.get("tile_count"),
             "source_year": entry.get("historical_year"),
             "history_verified": entry.get("facades_historical_status") == "VERIFIED",
-            "terrain_available": entry.get("terrain_status") != "MISSING",
+            "terrain_available": entry.get("terrain_status") not in (None, "", "MISSING"),
         })
     approved_chapters: list[int] = []
     for chapter in range(1, TOTAL_CHAPTERS + 1):
