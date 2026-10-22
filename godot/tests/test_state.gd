@@ -55,6 +55,10 @@ func _run() -> void:
 	var backup_path: String = "user://moty.save.json.test_backup"
 	var had_existing: bool = FileAccess.file_exists(oversized_path)
 	if had_existing:
+		check(not FileAccess.file_exists(backup_path), "backup slot must be empty")
+		if FileAccess.file_exists(backup_path):
+			quit(1)
+			return
 		check(DirAccess.rename_absolute(ProjectSettings.globalize_path(oversized_path), ProjectSettings.globalize_path(backup_path)) == OK, "backup existing save before test")
 		if FileAccess.file_exists(oversized_path):
 			failed += 1
