@@ -69,5 +69,12 @@ func _run() -> void:
 		check(DirAccess.remove_absolute(ProjectSettings.globalize_path(oversized_path)) == OK, "remove oversized fixture")
 	if had_existing:
 		check(DirAccess.rename_absolute(ProjectSettings.globalize_path(backup_path), ProjectSettings.globalize_path(oversized_path)) == OK, "restore existing save")
+	var full_gallery = State.new()
+	for i in range(State.MAX_SHOTS):
+		check(full_gallery.add_shot("user://photos/shot_%d.png" % i), "accept gallery shot %d" % i)
+	check(not full_gallery.add_shot("user://photos/overflow.png"), "reject shot beyond gallery cap")
+	check(not full_gallery.add_shot("user://photos/../escape.png"), "reject traversal on append")
+	check(not full_gallery.add_shot("user://photos/shot_0.png"), "reject duplicate on append")
+	check(full_gallery.shots.size() == State.MAX_SHOTS, "gallery remains bounded")
 	print("TESTS FAILED: ", failed)
 	quit(0 if failed == 0 else 1)
