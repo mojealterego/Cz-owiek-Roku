@@ -32,6 +32,7 @@ const TEXT := {
 		"restart": "POWRÓT DO MENU", "close": "ZAMKNIJ", "no_photos": "Brak zdjęć z tego przejścia.",
 		"snapshot": "Fotografia zapisana w urządzeniu.", "snapshot_error": "Błąd zapisu fotografii.",
 		"save_error": "Uwaga: zapis postępu nie powiódł się.",
+		"previous_photo": "POPRZEDNIE", "next_photo": "NASTĘPNE", "photo_missing": "Nie można otworzyć tej fotografii.",
 	},
 	"en": {
 		"start": "BEGIN", "continue": "CONTINUE SAVE", "resume": "CONTINUE",
@@ -55,6 +56,7 @@ const TEXT := {
 		"restart": "RETURN TO MENU", "close": "CLOSE", "no_photos": "No photographs captured in this run.",
 		"snapshot": "Photograph stored on device.", "snapshot_error": "Failed to save photograph.",
 		"save_error": "Warning: could not save progress.",
+		"previous_photo": "PREVIOUS", "next_photo": "NEXT", "photo_missing": "Cannot open this photograph.",
 	},
 }
 
@@ -76,6 +78,7 @@ var inspect_locations: Dictionary = {
 var pad: Dictionary = {"left": false, "right": false, "up": false, "down": false}
 var shot_in_progress: bool = false
 var shot_count: int = 0
+var gallery_index: int = 0
 
 func t(key: String) -> String:
 	return str(TEXT[state.language].get(key, key))
@@ -418,23 +421,40 @@ func _take_photo() -> void:
 
 func _show_gallery() -> void:
 	var previous: String = phase
+	gallery_index = maxi(0, state.shots.size() - 1)
+	_render_gallery(previous)
+
+func _render_gallery(return_phase: String) -> void:
 	phase = "GALLERY"
-	var panel := _modal(t("gallery"), t("no_photos") if state.shots.is_empty() else "%s: %s" % [t("photo"), str(state.shots.size())])
-	if not state.shots.is_empty():
-		var image_path: String = state.shots.back()
-		if FileAccess.file_exists(image_path):
-			var png := Image.new()
-			if png.load(image_path) == OK:
-				var picture := TextureRect.new()
-				picture.texture = ImageTexture.create_from_image(png)
-				picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-				picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-				picture.custom_minimum_size = Vector2(320, 190)
-				panel.add_child(picture)
+	var count: int = state.shots.size()
+	var caption: String = t("no_photos") if count == 0 else "%s %d / %d" % [t("photo"), gallery_index + 1, count]
+	var panel := _modal(t("gallery"), caption)
+	if count > 0:
+		var image_path: String = state.shots[gallery_index]
+		var png := Image.new()
+		if State._valid_photo_path(image_path) and FileAccess.file_exists(image_path) and png.load(image_path) == OK:
+			var picture := TextureRect.new()
+			picture.texture = ImageTexture.create_from_image(png)
+			picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			picture.custom_minimum_size = Vector2(320, 190)
+			panel.add_child(picture)
+		else:
+			panel.add_child(_label(t("photo_missing"), 18))
+		if gallery_index > 0:
+			_button(t("previous_photo"), panel, func() -> void:
+				gallery_index -= 1
+				_render_gallery(return_phase)
+			)
+		if gallery_index + 1 < count:
+			_button(t("next_photo"), panel, func() -> void:
+				gallery_index += 1
+				_render_gallery(return_phase)
+			)
 	_button(t("close"), panel, func() -> void:
-		if previous == "EXPLORATION":
+		if return_phase == "EXPLORATION":
 			_enter_world()
-		elif previous == "CH01_COMPLETED":
+		elif return_phase == "CH01_COMPLETED":
 			_show_end()
 		else:
 			_show_menu()
