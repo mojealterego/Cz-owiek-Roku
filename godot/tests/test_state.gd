@@ -39,5 +39,17 @@ func _run() -> void:
 	invalid["chapter_completed"] = true
 	invalid["choice"] = ""
 	check(State.from_dictionary(invalid) == null, "rejects broken ending invariant")
+	for malicious_path in ["user://photos/../escape.png", "user://photos/nested/file.png", "user://photos/evil\\\\file.png", "user://photos/.png"]:
+		invalid = serialized.duplicate(true)
+		invalid["shots"] = [malicious_path]
+		check(State.from_dictionary(invalid) == null, "rejects unsafe photo path: " + malicious_path)
+	invalid = serialized.duplicate(true)
+	invalid["shots"] = []
+	for i in range(State.MAX_SHOTS + 1):
+		invalid["shots"].append("user://photos/photo_%d.png" % i)
+	check(State.from_dictionary(invalid) == null, "rejects excessive photo count")
+	invalid = serialized.duplicate(true)
+	invalid["shots"] = ["user://photos/photo_01.png"]
+	check(State.from_dictionary(invalid) != null, "accepts safe photo path")
 	print("TESTS FAILED: ", failed)
 	quit(0 if failed == 0 else 1)
