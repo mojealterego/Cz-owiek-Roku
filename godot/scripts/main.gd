@@ -389,7 +389,7 @@ func _show_end() -> void:
 	_button(t("restart"), panel, _show_menu)
 
 func _take_photo() -> void:
-	if phase != "EXPLORATION" or shot_in_progress:
+	if phase != "EXPLORATION" or shot_in_progress or state.shots.size() >= State.MAX_SHOTS:
 		return
 	shot_in_progress = true
 	await RenderingServer.frame_post_draw
@@ -399,13 +399,19 @@ func _take_photo() -> void:
 	var directory: String = ProjectSettings.globalize_path("user://photos")
 	DirAccess.make_dir_recursive_absolute(directory)
 	var error: Error = picture.save_png(path)
-	if error == OK:
-		state.shots.append(path)
-		if not state.write_save():
+	if error == OK and state.add_shot(path):
+		if state.write_save():
+			if status_label != null:
+				status_label.text = t("snapshot")
+		else:
+			state.shots.erase(path)
+			DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 			push_warning(t("save_error"))
-		if status_label != null:
-			status_label.text = t("snapshot")
+			if status_label != null:
+				status_label.text = t("snapshot_error")
 	else:
+		if error == OK:
+			DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 		if status_label != null:
 			status_label.text = t("snapshot_error")
 	shot_in_progress = false
