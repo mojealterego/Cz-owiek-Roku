@@ -114,7 +114,10 @@ static func read_save() -> RefCounted:
 	if not FileAccess.file_exists("user://moty.save.json"):
 		return null
 	var handle: FileAccess = FileAccess.open("user://moty.save.json", FileAccess.READ)
-	if handle == null or handle.get_length() > MAX_SAVE_BYTES:
+	if handle == null:
+		return null
+	if handle.get_length() > MAX_SAVE_BYTES:
+		handle.close()
 		return null
 	var raw_text: String = handle.get_buffer(handle.get_length()).get_string_from_utf8()
 	handle.close()
