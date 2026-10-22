@@ -21,6 +21,12 @@ func mark_inspected(subject: String) -> bool:
 	inspected.append(subject)
 	return true
 
+func add_shot(path: String) -> bool:
+	if shots.size() >= MAX_SHOTS or not _valid_photo_path(path) or path in shots:
+		return false
+	shots.append(path)
+	return true
+
 func choose(value: String) -> bool:
 	if value not in ["PHOTO_AUDIENCE", "LISTEN_AUDIENCE"]:
 		return false
