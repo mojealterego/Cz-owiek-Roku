@@ -1,0 +1,32 @@
+name: Cinematic pipeline validation
+on:
+  push:
+    paths:
+      - 'moty_pipeline/**'
+      - '.github/workflows/cinematic-pipeline.yml'
+  pull_request:
+    paths:
+      - 'moty_pipeline/**'
+      - '.github/workflows/cinematic-pipeline.yml'
+jobs:
+  planner:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test cinematic planner
+        run: python -m unittest discover -s moty_pipeline -p 'test_*.py' -v
+      - name: Generate CH01 job plan
+        run: python moty_pipeline/orchestrate.py
+      - name: Check job count and media status
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data=json.loads(Path('moty_pipeline/CH01_production_jobs.json').read_text())
+          assert len(data['jobs']) == 32
+          assert all(not j['output_uri'] for j in data['jobs'])
+          print('CH01: 32 planned jobs, 0 generated media')
+          PY
