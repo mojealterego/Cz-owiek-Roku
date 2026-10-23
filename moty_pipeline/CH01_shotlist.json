@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "chapter": "CH01",
+  "source": "Chapter 1, gala Cieszyn December 2023",
+  "shots": [
+    {
+      "id": "CH01_S01",
+      "visual_prompt_pl": "Backstage gala in Cieszyn, December 2023, burgundy theater curtain and warm gold stage lights",
+      "voice_role": "narrator",
+      "duration_s_target": 6,
+      "camera": "cinematic",
+      "status": "STORYBOARD_DRAFT"
+    },
+    {
+      "id": "CH01_S02",
+      "visual_prompt_pl": "Cieszyn gala audience in evening clothes, cinematic wide shot",
+      "voice_role": "narrator",
+      "duration_s_target": 6,
+      "camera": "wide",
+      "status": "STORYBOARD_DRAFT"
+    },
+    {
+      "id": "CH01_S03",
+      "visual_prompt_pl": "Official host stands in spotlight and announces award",
+      "voice_role": "host",
+      "duration_s_target": 6,
+      "camera": "cinematic",
+      "status": "STORYBOARD_DRAFT"
+    },
+    {
+      "id": "CH01_S04",
+      "visual_prompt_pl": "Andrzej waits behind curtain, anxious close-up, cinematic lighting",
+      "voice_role": "narrator",
+      "duration_s_target": 6,
+      "camera": "cinematic",
+      "status": "STORYBOARD_DRAFT"
+    },
+    {
+      "id": "CH01_S05",
+      "visual_prompt_pl": "Andrzej enters stage through blinding white spotlight",
+      "voice_role": "narrator",
+      "duration_s_target": 6,
+      "camera": "cinematic",
+      "status": "STORYBOARD_DRAFT"
+    },
+    {
+      "id": "CH01_S06",
+      "visual_prompt_pl": "Award statuette passed between hands, macro shot",
+      "voice_role": "narrator",
+      "duration_s_target": 6,
+      "camera": "macro",
+      "status": "STORYBOARD_DRAFT"
+    },
+    {
+      "id": "CH01_S07",
+      "visual_prompt_pl": "Andrzej speaks at microphone; his family visible as silhouettes in front row",
+      "voice_role": "andrzej",
+      "duration_s_target": 6,
+      "camera": "cinematic",
+      "status": "STORYBOARD_DRAFT"
+    },
+    {
+      "id": "CH01_S08",
+      "visual_prompt_pl": "Final close-up on award and darkening theater stage",
+      "voice_role": "narrator",
+      "duration_s_target": 6,
+      "camera": "cinematic",
+      "status": "STORYBOARD_DRAFT"
+    }
+  ]
+}
