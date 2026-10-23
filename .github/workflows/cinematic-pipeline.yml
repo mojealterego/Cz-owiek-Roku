@@ -28,5 +28,8 @@ jobs:
           data=json.loads(Path('moty_pipeline/CH01_production_jobs.json').read_text())
           assert len(data['jobs']) == 32
           assert all(not j['output_uri'] for j in data['jobs'])
-          print('CH01: 32 planned jobs, 0 generated media')
+          from moty_pipeline.validate_assets import validate
+          evidence = validate('moty_pipeline/CH01_production_jobs.json', 'moty_pipeline/assets')
+          assert evidence['status'] == 'NOT_READY', evidence
+          print('CH01: 32 planned jobs, 0 generated media; asset gate NOT_READY')
           PY
