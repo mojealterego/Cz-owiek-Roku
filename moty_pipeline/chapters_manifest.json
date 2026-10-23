@@ -1,0 +1,356 @@
+{
+  "schema": 1,
+  "source": "Czlowiek_roku_ebook Ultrarozszerzona.pdf",
+  "chapters": [
+    {
+      "id": "CH01",
+      "act": "I",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH02",
+      "act": "I",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH03",
+      "act": "I",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH04",
+      "act": "I",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH05",
+      "act": "I",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH06",
+      "act": "I",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH07",
+      "act": "I",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH08",
+      "act": "I",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH09",
+      "act": "I",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH10",
+      "act": "I",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH11",
+      "act": "I",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH12",
+      "act": "I",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH13",
+      "act": "I",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH14",
+      "act": "I",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH15",
+      "act": "II",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH16",
+      "act": "II",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH17",
+      "act": "II",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH18",
+      "act": "II",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH19",
+      "act": "II",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH20",
+      "act": "II",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH21",
+      "act": "II",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH22",
+      "act": "II",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH23",
+      "act": "II",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH24",
+      "act": "II",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH25",
+      "act": "II",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH26",
+      "act": "II",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH27",
+      "act": "II",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH28",
+      "act": "II",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH29",
+      "act": "II",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH30",
+      "act": "II",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH31",
+      "act": "II",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH32",
+      "act": "II",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH33",
+      "act": "II",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH34",
+      "act": "II",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH35",
+      "act": "II",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH36",
+      "act": "II",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH37",
+      "act": "II",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH38",
+      "act": "II",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH39",
+      "act": "II",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH40",
+      "act": "II",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH41",
+      "act": "II",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH42",
+      "act": "III",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH43",
+      "act": "III",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH44",
+      "act": "III",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH45",
+      "act": "III",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH46",
+      "act": "III",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH47",
+      "act": "III",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH48",
+      "act": "III",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH49",
+      "act": "III",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH50",
+      "act": "III",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH51",
+      "act": "III",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH52",
+      "act": "III",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH53",
+      "act": "III",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH54",
+      "act": "III",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH55",
+      "act": "III",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH56",
+      "act": "III",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH57",
+      "act": "III",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH58",
+      "act": "III",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH59",
+      "act": "III",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH60",
+      "act": "III",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH61",
+      "act": "III",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH62",
+      "act": "III",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH63",
+      "act": "IV",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH64",
+      "act": "IV",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH65",
+      "act": "IV",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH66",
+      "act": "IV",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH67",
+      "act": "IV",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH68",
+      "act": "IV",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH69",
+      "act": "IV",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    },
+    {
+      "id": "CH70",
+      "act": "IV",
+      "status": "SOURCE_INDEXED; ADAPTATION_PENDING"
+    }
+  ]
+}
